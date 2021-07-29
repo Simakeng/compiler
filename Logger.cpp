@@ -1,5 +1,4 @@
 #include "Logger.h"
-#include "Logger.h"
 
 #ifdef WIN32 // Windows Platform
 #include <Windows.h>
@@ -7,6 +6,10 @@
 
 namespace Compiler
 {
+	int __maigc = []() {
+		std::wcout.imbue(std::locale("chs"));
+		return 0;
+	}();
 
 	void Console::SetColor(Color color)
 	{

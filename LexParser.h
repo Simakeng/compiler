@@ -1,13 +1,21 @@
 #pragma once
 #include <fstream>
+#include <deque>
+#include "Lex.h"
 namespace Compiler 
 {
 	class LexParser
 	{
 	public:
 		LexParser(const char* fileName);
-		~LexParser();
+		~LexParser() = default;
 	private:
-		std::fstream byteStream;
+		std::ifstream byteStream;
+		std::string fileName;
+	public:
+		std::deque<Lex::Token> GetTokens();
 	};
+
+
+	
 }

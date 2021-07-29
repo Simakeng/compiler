@@ -1,3 +1,4 @@
+#include <any>
 namespace Compiler::Lex
 {
 	enum class TokenType
@@ -7,16 +8,16 @@ namespace Compiler::Lex
 		Multi,		// *
 		Divid,		// /
 		Remain,		// %
-		Assign,		// =
 		Eq,			// ==
 		Neq,		// !=
-		Ge,			// >
-		Le,			// <
 		Geq,		// >=
 		Leq,		// <=
-		Not,		// !
 		And,		// &&
 		Or,			// ||
+		Assign,		// =
+		Ge,			// >
+		Le,			// <
+		Not,		// !
 		Comma,		// ,
 
 		If,			// if
@@ -37,8 +38,24 @@ namespace Compiler::Lex
 		Brs,		// {
 		Bre,		// }
 
+		Sep,		// ;
+
 		Ident,
-		Number, 
-		
+		Interger,
+		Floating,
+		String,
+		blank,
+		comment_h,
+		comment_l_b,
+		comment_l_e
+	};
+
+	struct Token
+	{
+		TokenType type;
+		std::any value;
+
+		int _line;
+		int _start;
 	};
 }

@@ -49,6 +49,17 @@ namespace Compiler
 			std::cout << Level2String[logLevel] << ' ' << head;
 			ContinueLog(args...);
 		};
+
+		template<class ... Args>
+		static inline void Log(wchar_t head, Args... args)
+		{
+			Level logLevel = GetLogLevel(args...);
+			SetColor(Level2Color[logLevel]);
+			std::cout << Level2String[logLevel] << ' ';
+			std::wcout << head;
+			ContinueLog(args...);
+		};
+
 	private:
 		static void SetColor(Color color);
 
@@ -63,6 +74,17 @@ namespace Compiler
 		static inline void ContinueLog(T tail)
 		{
 			std::cout << ' ' << tail << std::endl;
+		}
+		template<class ... Args>
+		static inline void ContinueLog(wchar_t head, Args ... args)
+		{
+			std::wcout << L' ' << head;
+			ContinueLog(args...);
+		}
+		template<>
+		static inline void ContinueLog(wchar_t tail)
+		{
+			std::wcout << L' ' << tail << std::endl;
 		}
 		template<>
 		static inline void ContinueLog(Level level) { std::cout << std::endl; }
