@@ -2,4 +2,9 @@
 /bin/*
 /obj/*
 
+obj.s
+
 # Visual Studio Database
+**/ipch
+.vs/**/*.db
+

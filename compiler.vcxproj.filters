@@ -11,6 +11,9 @@
     <Filter Include="Logger">
       <UniqueIdentifier>{7a984e93-bb30-4d80-b4c5-655cd93fe07a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AssemblyGeneration">
+      <UniqueIdentifier>{e5379895-a935-4f65-9384-dd13ecb995c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -20,6 +23,7 @@
     <ClCompile Include="Logger.cpp">
       <Filter>Logger</Filter>
     </ClCompile>
+    <ClCompile Include="AssemblyGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lex.h">
@@ -30,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="AssemblyGeneration.h">
+      <Filter>AssemblyGeneration</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

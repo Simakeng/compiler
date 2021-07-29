@@ -151,11 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssemblyGeneration.cpp" />
     <ClCompile Include="LexParser.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AssemblyGeneration.h" />
     <ClInclude Include="Lex.h" />
     <ClInclude Include="LexParser.h" />
     <ClInclude Include="Logger.h" />
