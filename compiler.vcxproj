@@ -157,6 +157,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ASM-IR.h" />
     <ClInclude Include="AssemblyGeneration.h" />
     <ClInclude Include="Lex.h" />
     <ClInclude Include="LexParser.h" />
