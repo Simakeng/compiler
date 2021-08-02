@@ -1,17 +1,18 @@
-CompUnit -> Decl | CompUnit
-Decl -> ConstDecl | VarOrFuncDecl
-
+CompUnit -> Decl CompUnit
+CompUnit -> ε
+Decl -> ConstDecl
+Decl -> VarOrFuncDecl
 ConstDecl -> 'const' Type ConstDeclBody
 VarOrFuncDecl -> Type Ident VarOrFuncDeclBody
 
-Type -> 'int' | 'void'
-
-ConstDeclBody -> Ident VarDeclbody ';'
+Type -> 'int'
+Type -> 'void'
+ConstDeclBody -> Ident VarDeclbody
 
 VarOrFuncDeclBody -> VarDeclbody 
 VarOrFuncDeclBody -> FuncDeclBody
 
-VarDeclbody -> ArraySizeDecl VarInit
+VarDeclbody -> ArraySizeDecl VarDecl
 
 ArraySizeDecl -> '[' ArraySizeNum ']' ArraySizeDecl
 ArraySizeDecl -> ε
@@ -33,7 +34,7 @@ ConstInitVal -> ConstExp
 
 ConstExp -> Exp
 
-FuncDeclBody -> '('FuncParamDecl FuncParamDeclNext ')' CodeBlock
+FuncDeclBody -> '(' FuncParamDecl FuncParamDeclNext ')' CodeBlock
 
 FuncParamDecl -> ε
 FuncParamDecl -> 'int' ArraySizeDecl Ident
@@ -44,18 +45,19 @@ FuncParamDeclNext -> FuncParamDecl
 
 CodeBlock -> '{' Stmts '}'
 
-Stmts -> Stmt ';' Stmts
+Stmts -> Stmt Stmts
 Stmts -> ε
 
 Stmt -> ε
-Stmt -> Decl
-Stmt -> LVal '=' Exp
-Stmt -> CodeBlock
-Stmt -> 'if' '( Cond ')' Stmt ElseStmt 
+Stmt -> Decl ';'
+Stmt -> LVal '=' Exp ';'
+Stmt -> Exp ';'
+Stmt -> CodeBlock 
+Stmt -> 'if' '(' Cond ')' Stmt ElseStmt 
 Stmt -> 'while' '(' Cond ')' Stmt
-Stmt -> 'break'
-Stmt -> 'continue'
-Stmt -> 'return' ReturnVal
+Stmt -> 'break' ';'
+Stmt -> 'continue' ';'
+Stmt -> 'return' ReturnVal ';'
 
 ReturnVal -> ε
 ReturnVal -> Exp
@@ -63,7 +65,10 @@ ReturnVal -> Exp
 ElseStmt -> 'else' Stmt
 ElseStmt -> ε
 
+
 Exp -> AddExp
+ConstExp -> AddExp
+
 Cond -> LOrExp
 LVal -> Ident ArrayAcces
 
@@ -83,7 +88,9 @@ FuncRParamsNext -> ε
 FuncRParamsNext -> ',' FuncRParamsNext
 FuncRParamsNext -> Exp
 
-UnaryOp -> '+' | '−' | '!'
+UnaryOp -> '+'
+UnaryOp -> '-'
+UnaryOp -> '!'
 MulExp -> UnaryExp MulExpNext
 MulExpNext -> ε
 MulExpNext -> '*' MulExp MulExpNext
@@ -93,7 +100,7 @@ MulExpNext -> '%' MulExp MulExpNext
 AddExp -> MulExp AddExpNext
 AddExpNext -> ε
 AddExpNext -> '+' AddExp AddExpNext
-AddExpNext -> '−' AddExp AddExpNext
+AddExpNext -> '-' AddExp AddExpNext
 
 RelExp -> AddExp RelExpNext
 RelExpNext -> ε
@@ -115,4 +122,3 @@ LOrExp -> EqExp LOrExpNext
 LOrExpNext -> '||' EqExp LOrExpNext
 LOrExpNext -> ε
 
-ConstExp -> AddExp
