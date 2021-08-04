@@ -40,7 +40,6 @@ first_set = dict(zip(non_terminal_tokens, [[]
 follow_set = dict(zip(non_terminal_tokens, [[]
                                             for _ in range(len(non_terminal_tokens))]))
 
-
 can_ntt_be_null = dict(
     zip(non_terminal_tokens, [False for _ in range(len(non_terminal_tokens))]))
 
@@ -162,8 +161,8 @@ def get_first(ntt):
         while selec_idx != len(tokens):
             if(tokens[selec_idx] in non_terminal_tokens):
                 matched = True
-                result += get_first(tokens[0])
-                if(can_be_null(tokens[0])):
+                result += get_first(tokens[selec_idx])
+                if(can_be_null(tokens[selec_idx])):
                     selec_idx += 1
                 else:
                     break
@@ -181,51 +180,6 @@ def get_first(ntt):
 
     return list(set(result))
 
-
-# def get_follow(ntt, n=0):
-#     result = []
-#     # 别问，问就是 if else
-#     if(n > 16):
-#         return result
-
-#     for rule_id, rule in rules.items():
-#         elm = rule["element"]
-#         tkn = rule["tokens"]
-
-#         tokens = tkn.split(' ')
-
-#         if(ntt not in tkn.split(' ')):
-#             continue
-
-#         idx = tokens.index(ntt)
-#         # 最后一个
-#         if(idx == len(tokens) - 1):
-#             if(elm != ntt):
-#                 result += get_follow(elm, n+1)
-#             continue
-#         else:  # 不是最后一个
-#             next_token = tokens[idx + 1]
-#             if(next_token in terminal_tokens):
-#                 result.append(next_token)
-#             else:
-#                 result += first_set[next_token]
-#                 while(can_be_null(tokens[idx + 1])):
-#                     idx += 1
-#                     if(idx + 1 != len(tokens)):
-#                         if(tokens[idx + 1] in terminal_tokens):
-#                             result.append(tokens[idx + 1])
-#                             break
-#                         else:
-#                             result += first_set[tokens[idx + 1]]
-#                     else:
-#                         if(elm != tokens[idx]):
-#                             result += get_follow(elm, n+1)
-#                         break
-#             continue
-
-#         raise Exception()
-
-#     return result
 
 def get_follow(ntt, n=0):
     # 别问，问就是 if else
@@ -264,16 +218,15 @@ def get_follow(ntt, n=0):
 
     return list(set(result))
 
+
 print("First集：")
 for token in non_terminal_tokens:
     first_set[token] = get_first(token)
-    print(token,':',' '.join(first_set[token]))
+    print(token, ':', ' '.join(first_set[token]))
 print("\nFollow集：")
 for token in non_terminal_tokens:
     follow_set[token] = get_follow(token)
-    print(token,':',' '.join(follow_set[token]))
-
-
+    print(token, ':', ' '.join(follow_set[token]))
 
 
 # 如果产生式以终结符开头，其SELECT集就是该终结符
@@ -283,3 +236,147 @@ for token in non_terminal_tokens:
 
 # 产生式的FISRT集为所有可以给该产生式开头的符号的FIRST集
 # 产生式的FOLLOW集为所有以该符号结尾的产生式的FOLLOW集
+rule_ids = range(len(rules.keys()))
+
+
+def get_select(rid):
+    rule = rules[rid]
+    elm = rule['element']
+    tokens = rule['tokens'].split(' ')
+    result = []
+
+    for token in tokens:
+        if(token in terminal_tokens):
+            result.append(token)
+            return list(set(result))
+        elif(token == 'ε'):
+            result += follow_set[elm]
+        else:
+            result += first_set[token]
+            if(not can_be_null(token)):
+                return list(set(result))  # 退出循环
+
+    result += follow_set[elm]
+
+    return list(set(result))
+
+
+pass
+
+select_set = dict(zip(rule_ids, [get_select(_) for _ in rule_ids]))
+
+
+# 生成 Parser.h
+def gen_parser_h_file():
+
+    ken_types_enum = []
+    ken_types_enum.append('	enum class TokenType')
+    ken_types_enum.append('	{')
+
+    for term in terminal_tokens:
+        tkn = reverse_map[term]
+        ken_types_enum.append(
+            f'		{tkn} = __cvt(Compiler::Lex::TokenType::{tkn}),')
+        pass
+
+    ken_types_enum.append('	')
+
+    for non_term in non_terminal_tokens:
+        ken_types_enum.append(f'		{non_term},')
+        pass
+    ken_types_enum.append('	')
+
+    ken_types_enum.append(
+        f'		Empty,')
+
+    ken_types_enum.append('	};')
+
+    ken_types_enum = '\n'.join(ken_types_enum)
+
+    with open('../Parser.h', encoding="utf-8") as f:
+        template = f.read()
+    start_label = '// ! Auto Generated Content Start'
+    end_label = '// ! Auto Generated Content end'
+    start = template.index(start_label) + len(start_label)
+    end = template.index(end_label)
+    template = template[:start] + '\n' + \
+        ken_types_enum + '\n\t' + template[end:]
+
+    with open('../Parser.h', 'w', encoding="utf-8") as f:
+        f.write(template)
+    pass
+
+
+gen_parser_h_file()
+
+# 生成 Parser.cpp
+
+
+def gen_parser_cpp_file():
+
+    token_cnt = len(terminal_tokens) + len(non_terminal_tokens) + 1
+    rule_cnt = len(rules.keys())
+
+    prod_rule_matches = []
+    for i, rule in rules.items():
+        token_list = []
+        for token in rule['tokens'].split(' '):
+            if token in terminal_tokens:
+                token = reverse_map[token]
+            if(token == 'ε'):
+                token = 'Empty'
+            token_list.append(
+                '\t\t\tparent->tokenList.push_back(CreateNode(TokenType::' +
+                token + ', parent));'
+            )
+        prod_rule_matches.append(
+            '\t\t// ' + rule['element'] + ' -> ' + rule['tokens'] + '\n'
+            '\t\tprodRules[' + str(i+1) + '] = [](ASTNode* parent, TokenType inputToken){\n' +
+            '\n'.join(token_list) +
+            '\n\t\t};\n'
+        )
+
+        prod_rule_matches.append('\t\t// Select: ' + ', '.join(select_set[i]))
+
+        elm = rule['element']
+        for e in select_set[i]:
+            prod_rule_matches.append(
+                '\t\tLL1Table[__cvt(TokenType::' + elm + 
+                ')][__cvt(TokenType::'+reverse_map[e]+')] = '+ str(i+1)+';')
+        prod_rule_matches.append('')
+
+    prod_rule_matches = '\n' .join(prod_rule_matches)
+
+    with open('../Parser.cpp', encoding="utf-8") as f:
+        template = f.read()
+        start_label = '// ! Auto Generated Content Start'
+        end_label = '// ! Auto Generated Content end'
+        start = template.index(start_label) + len(start_label)
+        end = template.index(end_label)
+        template = template[:start] + '\n' + '''\
+	const auto tokenCount = ''' + str(token_cnt) + ''' ;
+	int LL1Table[tokenCount][tokenCount];
+	ProductionGenerationFunction prodRules[''' + str(rule_cnt + 1)+ '''];
+	int InitLL1()
+	{
+		for (auto i = 0; i < tokenCount; i++)
+			for (auto j = 0; j < tokenCount; j++)
+				LL1Table[i][j] = 0;
+
+		prodRules[0] = [](ASTNode* Node, TokenType inputToken) {
+			Console::Log("Expecting", "but get", Level::Error);
+		};
+		\n''' + prod_rule_matches + '''\
+		
+		return -1;
+	}
+	int _ = InitLL1();\n\n\t''' + template[end:]
+
+    with open('../Parser.cpp', 'w', encoding="utf-8") as f:
+        f.write(template)
+    pass
+
+
+gen_parser_cpp_file()
+
+pass

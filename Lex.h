@@ -1,3 +1,4 @@
+#pragma once
 #include <any>
 namespace Compiler::Lex
 {
@@ -40,15 +41,19 @@ namespace Compiler::Lex
 
 		Sep,		// ;
 
+		End,
+
 		Ident,
 		Interger,
-		Floating,
 		String,
 		blank,
 		comment_h,
 		comment_l_b,
 		comment_l_e
 	};
+	
+	
+	
 
 	struct Token
 	{

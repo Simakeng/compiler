@@ -17,6 +17,9 @@
     <Filter Include="ASM-IR">
       <UniqueIdentifier>{e713672d-064c-419a-903c-87bc85dac6c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{a325ef6d-9979-4563-ac7b-d625bc91878e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -28,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="AssemblyGeneration.cpp">
       <Filter>AssemblyGeneration</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser.cpp">
+      <Filter>Parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +51,9 @@
     </ClInclude>
     <ClInclude Include="ASM-IR.h">
       <Filter>ASM-IR</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Parser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

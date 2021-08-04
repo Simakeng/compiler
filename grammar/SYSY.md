@@ -1,13 +1,12 @@
 CompUnit -> Decl CompUnit
-CompUnit -> ε
+CompUnit -> '$'
 Decl -> ConstDecl
 Decl -> VarOrFuncDecl
-ConstDecl -> 'const' Type ConstDeclBody
+ConstDecl -> 'const' Type Ident VarDeclbody
 VarOrFuncDecl -> Type Ident VarOrFuncDeclBody
 
 Type -> 'int'
 Type -> 'void'
-ConstDeclBody -> Ident VarDeclbody
 
 VarOrFuncDeclBody -> VarDeclbody 
 VarOrFuncDeclBody -> FuncDeclBody
@@ -48,9 +47,7 @@ CodeBlock -> '{' Stmts '}'
 Stmts -> Stmt Stmts
 Stmts -> ε
 
-Stmt -> ε
-Stmt -> Decl ';'
-Stmt -> LVal '=' Exp ';'
+Stmt -> Decl
 Stmt -> Exp ';'
 Stmt -> CodeBlock 
 Stmt -> 'if' '(' Cond ')' Stmt ElseStmt 
@@ -66,20 +63,30 @@ ElseStmt -> 'else' Stmt
 ElseStmt -> ε
 
 
-Exp -> AddExp
+
+
+Exp -> AddExp AssignExpBody
 ConstExp -> AddExp
 
+AssignExpBody -> '=' AddExp
+AssignExpBody -> ε
+
 Cond -> LOrExp
-LVal -> Ident ArrayAcces
 
 ArrayAcces -> '[' Exp ']' ArrayAcces
 ArrayAcces -> ε
 
 PrimaryExp -> '(' Exp ')' 
-PrimaryExp -> LVal
 PrimaryExp -> Number
+
+LvalAux -> ArrayAcces
+FuncCall -> '(' FuncRParams FuncRParamsNext ')' 
+
+LvalAuxOrFuncCall -> LvalAux
+LvalAuxOrFuncCall -> FuncCall
+
 UnaryExp -> PrimaryExp 
-UnaryExp -> Ident '(' FuncRParams FuncRParamsNext ')' 
+UnaryExp -> Ident LvalAuxOrFuncCall
 UnaryExp -> UnaryOp UnaryExp
 
 FuncRParams -> ε

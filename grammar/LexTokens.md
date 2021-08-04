@@ -30,5 +30,6 @@ Sbe -> ']'
 Brs -> '{'
 Bre -> '}'
 Sep -> ';'
+End -> '$'
 Ident -> Ident
 Interger -> Number
