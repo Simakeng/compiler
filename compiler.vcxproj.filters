@@ -20,6 +20,9 @@
     <Filter Include="Parser">
       <UniqueIdentifier>{a325ef6d-9979-4563-ac7b-d625bc91878e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AST">
+      <UniqueIdentifier>{40878daa-7fcf-4bbd-8a0f-5ff0eb3411b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -34,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="ASTUtils.cpp">
+      <Filter>AST</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +60,9 @@
     </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="ASTUtils.h">
+      <Filter>AST</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,5 +44,15 @@ namespace Compiler
 			break;
 		}
 	}
+	static int exitCode = 0;
+	void Console::SetExitCode(int code)
+	{
+		exitCode = code;
+	}
+
+	int Console::GetExitCode()
+	{
+		return exitCode;
+	}
 
 }

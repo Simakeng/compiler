@@ -347,6 +347,20 @@ def gen_parser_cpp_file():
 
     prod_rule_matches = '\n' .join(prod_rule_matches)
 
+    cvt_list = []
+
+    for term in terminal_tokens:
+        tkn = reverse_map[term]
+        cvt_list.append(f'\t\tcase __cvt(TokenType::{tkn}): return "[{term}]";')
+
+    cvt_list.append('\t\t')
+
+    for non_term in non_terminal_tokens:
+        cvt_list.append(f'\t\tcase __cvt(TokenType::{non_term}): return "[{non_term}]";')
+    
+    cvt_list.append(f'\t\tcase __cvt(TokenType::Empty): return u8"[ε]";')
+
+
     with open('../Parser.cpp', encoding="utf-8") as f:
         template = f.read()
         start_label = '// ! Auto Generated Content Start'
@@ -364,13 +378,27 @@ def gen_parser_cpp_file():
 				LL1Table[i][j] = 0;
 
 		prodRules[0] = [](ASTNode* Node, TokenType inputToken) {
-			Console::Log("Expecting", "but get", Level::Error);
+			Console::Log("Parser Token error when parsing Node",
+				__tstr(Node->type),
+				", get",__tstr(inputToken)
+				, Level::Error);
+			Console::SetExitCode(-1);
 		};
 		\n''' + prod_rule_matches + '''\
 		
 		return -1;
 	}
-	int _ = InitLL1();\n\n\t''' + template[end:]
+	int _ = InitLL1();
+	
+	const char* const __tstr(int rhs)
+	{
+		switch(rhs)
+		{\n''' + '\n'.join(cvt_list) + '''
+		default:
+			return "[Unknown]";
+		}
+	}
+    \n\n\t''' + template[end:]
 
     with open('../Parser.cpp', 'w', encoding="utf-8") as f:
         f.write(template)

@@ -31,8 +31,6 @@ VarInitValueNext -> ε
 
 ConstInitVal -> ConstExp
 
-ConstExp -> Exp
-
 FuncDeclBody -> '(' FuncParamDecl FuncParamDeclNext ')' CodeBlock
 
 FuncParamDecl -> ε
@@ -125,7 +123,7 @@ LAndExp -> EqExp LAndExpNext
 LAndExpNext -> ε
 LAndExpNext -> '&&' EqExp LAndExpNext
 
-LOrExp -> EqExp LOrExpNext
-LOrExpNext -> '||' EqExp LOrExpNext
+LOrExp -> LAndExp LOrExpNext
+LOrExpNext -> '||' LAndExp LOrExpNext
 LOrExpNext -> ε
 

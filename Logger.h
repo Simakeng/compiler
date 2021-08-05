@@ -107,5 +107,8 @@ namespace Compiler
 		}
 
 		static inline Level GetLogLevel() { return Level::Info; }
+	public:
+		static void SetExitCode(int code);
+		static int GetExitCode();
 	};
 }

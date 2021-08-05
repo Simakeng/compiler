@@ -1,6 +1,7 @@
 #pragma once
 #include "Lex.h"
 #include <deque>
+#include <sstream>
 
 namespace Compiler::Parser
 {
@@ -10,6 +11,13 @@ namespace Compiler::Parser
 		return static_cast<const int>(rhs);
 	}
 
+	const char* const __tstr(int rhs);
+
+	template<typename T>
+	constexpr auto __tstr(const T& rhs)
+	{
+		return __tstr(static_cast<const int>(rhs));
+	}
 
 
 	// ! Auto Generated Content Start
@@ -51,58 +59,57 @@ namespace Compiler::Parser
 		Ident = __cvt(Compiler::Lex::TokenType::Ident),
 		Interger = __cvt(Compiler::Lex::TokenType::Interger),
 	
-		Exp,
-		ConstDecl,
-		LvalAux,
-		FuncRParamsNext,
-		MulExpNext,
-		AddExpNext,
-		ConstExp,
-		Decl,
-		ArraySizeNum,
-		MulExp,
-		CompUnit,
-		UnaryExp,
-		VarOrFuncDeclBody,
-		UnaryOp,
-		FuncCall,
-		FuncDeclBody,
-		CodeBlock,
-		Stmts,
-		Stmt,
-		FuncParamDecl,
-		FuncParamDeclNext,
-		ElseStmt,
-		Cond,
-		RelExpNext,
-		VarInitValueNext,
-		EqExp,
-		ArraySizeDecl,
-		LAndExp,
-		ReturnVal,
-		ConstInitVal,
-		RelExp,
-		Type,
+		FuncRParams,
 		LOrExpNext,
-		ArrayAcces,
+		ConstExp,
 		VarDeclbody,
 		VarInitValue,
-		PrimaryExp,
-		VarOrFuncDecl,
-		AddExp,
+		RelExp,
+		FuncParamDecl,
+		RelExpNext,
+		ElseStmt,
+		AddExpNext,
 		EqExpNext,
+		FuncDeclBody,
+		ArrayAcces,
+		FuncParamDeclNext,
 		LvalAuxOrFuncCall,
-		FuncRParams,
-		AssignExpBody,
+		ConstInitVal,
+		CodeBlock,
+		Exp,
+		UnaryExp,
+		FuncRParamsNext,
+		UnaryOp,
 		VarDecl,
-		LOrExp,
+		MulExpNext,
+		Stmts,
+		CompUnit,
+		Type,
 		LAndExpNext,
+		LOrExp,
+		VarOrFuncDeclBody,
+		ConstDecl,
+		VarOrFuncDecl,
+		ArraySizeDecl,
+		FuncCall,
+		PrimaryExp,
+		ArraySizeNum,
+		LAndExp,
+		Stmt,
+		VarInitValueNext,
+		LvalAux,
+		AssignExpBody,
+		MulExp,
+		ReturnVal,
+		EqExp,
+		Decl,
+		AddExp,
+		Cond,
 	
 		Empty,
 	};
 	// ! Auto Generated Content end
 
-	bool IsTerminalToken(TokenType type);
 	
 	struct ASTNode
 	{
@@ -114,4 +121,8 @@ namespace Compiler::Parser
 	ASTNode* ParserTokens(const std::deque<Compiler::Lex::Token>& tokens);
 
 	typedef void (*ProductionGenerationFunction)(ASTNode*, TokenType);
+
+	std::string VisualizeAST(ASTNode* ast, std::string prefix = "", std::stringstream* ss = nullptr);
+
+	void FreeNode(ASTNode* node);
 }
