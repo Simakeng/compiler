@@ -48,19 +48,21 @@ namespace Compiler::AST
 			if (subnode->tokenList.size() != 0)
 				__StripExprNode(subnode);
 
-		if (ast->tokenList.size() == 1 && ast->tokenList.front()->tokenList.size() == 0)
+		//if (ast->tokenList.size() == 1 && ast->tokenList.front()->tokenList.size() == 0)
+		if (ast->tokenList.size() == 1)
 		{
 			auto child = ast->tokenList.front();
 			ast->type = child->type;
-			ast->value = child->type;
+			ast->value = child->value;
 			auto _ = decltype(ast->tokenList)();
-			std::swap(ast->tokenList, _);
+			std::swap(ast->tokenList, child->tokenList);
+			std::swap(child->tokenList, _);
 			FreeNode(child);
 		}
 	}
 	void StripExprNode(ASTNode* ast)
 	{
-		if (ast->type == TokenType::ConstExp || ast->type == TokenType::Exp)
+		if (ast->type == TokenType::ConstExp || ast->type == TokenType::Exp || ast->type == TokenType::Cond)
 		{
 			for (auto& subnode : ast->tokenList)
 				__StripExprNode(subnode);
@@ -70,6 +72,18 @@ namespace Compiler::AST
 			StripExprNode(subnode);
 		}
 	}
+	void __SearchGlobalFunctions(ASTNode* ast, std::deque<ASTNode*>* result)
+	{
+		if (ast->type == TokenType::FuncDeclBody)
+			result->push_back(ast->parent);
+		for (auto& sub : ast->tokenList)
+			__SearchGlobalFunctions(sub, result);
+	}
 
-
+	std::deque<ASTNode*> SearchGlobalFunctions(ASTNode* ast)
+	{
+		auto result = std::deque<ASTNode*>();
+		__SearchGlobalFunctions(ast, &result);
+		return result;
+	}
 }

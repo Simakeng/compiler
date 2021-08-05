@@ -197,7 +197,7 @@ def get_follow(ntt, n=0):
 
         rule_len = len(tokens)
         idx = tokens.index(ntt)
-
+        
         # 不是该产生式的最后一个
         while (idx + 1 != rule_len):
             if(not tokens[idx + 1] in terminal_tokens):  # 如果下一个符号不是终结符
@@ -210,11 +210,14 @@ def get_follow(ntt, n=0):
                 idx += 1
             else:  # 不可以
                 break
-        # 是该产生式的最后一个
-        else:
-            if(elm != ntt and elm != tokens[-1]):  # 特判：防止循环
+
+        # 一路判断到了产生式的最后一个
+        if(idx + 1 == rule_len):
+            # if(elm != ntt and elm != tokens[-1]):  # 特判：防止循环
+            if(elm != ntt):  # 特判：防止循环
                 # print("find:", ntt, ":", elm, '->', ' '.join(tokens))
-                result += get_follow(elm, n+1)  # 加上该产生的follow集
+                
+                result += get_follow(elm, n + 5 if elm == tokens[-1] else n + 1)  # 加上该产生的follow集
 
     return list(set(result))
 
@@ -225,6 +228,8 @@ for token in non_terminal_tokens:
     print(token, ':', ' '.join(first_set[token]))
 print("\nFollow集：")
 for token in non_terminal_tokens:
+    if(token == 'LvalAuxOrFuncCall'):
+        print('f')
     follow_set[token] = get_follow(token)
     print(token, ':', ' '.join(follow_set[token]))
 

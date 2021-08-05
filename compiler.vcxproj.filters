@@ -14,14 +14,14 @@
     <Filter Include="AssemblyGeneration">
       <UniqueIdentifier>{e5379895-a935-4f65-9384-dd13ecb995c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ASM-IR">
-      <UniqueIdentifier>{e713672d-064c-419a-903c-87bc85dac6c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Parser">
       <UniqueIdentifier>{a325ef6d-9979-4563-ac7b-d625bc91878e}</UniqueIdentifier>
     </Filter>
     <Filter Include="AST">
       <UniqueIdentifier>{40878daa-7fcf-4bbd-8a0f-5ff0eb3411b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IR">
+      <UniqueIdentifier>{e713672d-064c-419a-903c-87bc85dac6c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,14 +55,14 @@
     <ClInclude Include="AssemblyGeneration.h">
       <Filter>AssemblyGeneration</Filter>
     </ClInclude>
-    <ClInclude Include="ASM-IR.h">
-      <Filter>ASM-IR</Filter>
-    </ClInclude>
     <ClInclude Include="Parser.h">
       <Filter>Parser</Filter>
     </ClInclude>
     <ClInclude Include="ASTUtils.h">
       <Filter>AST</Filter>
+    </ClInclude>
+    <ClInclude Include="IR.h">
+      <Filter>IR</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

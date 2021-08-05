@@ -124,10 +124,12 @@ namespace Compiler
 						token.type = type;
 						token._line = _linec;
 						token._start = _charc;
+						token.value.reset();
 
 						switch (type)
 						{
 						case Lex::TokenType::Ident:
+						case Lex::TokenType::Interger:
 							token.value = m.str();
 						default:
 							tokens.emplace_back(move(token));

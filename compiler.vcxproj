@@ -163,7 +163,7 @@
     <ClCompile Include="Parser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ASM-IR.h" />
+    <ClInclude Include="IR.h" />
     <ClInclude Include="AssemblyGeneration.h" />
     <ClInclude Include="ASTUtils.h" />
     <ClInclude Include="Lex.h" />
