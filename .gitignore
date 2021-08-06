@@ -8,3 +8,7 @@ obj.s
 **/ipch
 .vs/**/*.db
 
+out.*
+*.ast
+
+/**/.vscode

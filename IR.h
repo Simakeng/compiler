@@ -1,7 +1,10 @@
 #pragma once
+#include "Parser.h"
 #include <string>
 #include <deque>
-namespace Compiler::ASM
+#include <vector>
+#include <unordered_map>
+namespace Compiler::IR
 {
 	class IR;
 
@@ -48,19 +51,42 @@ namespace Compiler::ASM
 		int Op1ID, Op2ID;
 		int id;
 	};
-	
-	struct Var
+
+	struct Decl
 	{
 		enum class Type
+		{
+			Const,
+			Var,
+			Function
+		} type;
+		std::string name;
+		Decl(Type _type) : type(_type) {};
+		~Decl() = default;
+	};
+
+	struct Var : public Decl
+	{
+		enum class VType
 		{
 			VOID,
 			INT,
 			INTPTR
-		} type;
+		} vtype;
 		std::string name;
 		std::deque<int> size;
-		int domain_id;
+		std::vector<int> initValue;
+
+		Var() : Decl(Type::Var) {}
+		Var(Type _) : Decl(_) {}
 	};
+
+
+	struct ConstDecl : public Var
+	{
+		ConstDecl() : Var(Type::Const) {}
+	};
+
 
 	class CodeBlock : public Stmt
 	{
@@ -68,28 +94,34 @@ namespace Compiler::ASM
 		std::deque<Var> localConstants;
 		CodeBlock* parentBlock = nullptr;
 	};
-	
+
 	class Expr : public Stmt
 	{
 		std::deque<Operation> ops;
 		CodeBlock* parentCB;
 	};
 
-	class If : public Stmt 
+	class If : public Stmt
 	{
 		Expr* cond;
 		CodeBlock* success;
 		CodeBlock* fail;
 	};
-	
+
 	class While : public Stmt
 	{
 		Expr* cond;
 		CodeBlock* success;
 	};
 
+	struct SymbolList
+	{
+		std::deque<Decl*> decls;
+		std::unordered_map<std::string, Decl*> index;
+		SymbolList* parentList = nullptr;
+	};
 
-	class Function 
+	class Function : public Decl
 	{
 		std::string name;
 		std::deque<Var> params;
@@ -99,12 +131,19 @@ namespace Compiler::ASM
 	};
 
 
-	class IR 
-	{
-	public:
-		IR();
-		~IR() = default;
-	private:
 
+	
+
+	class IRinfo
+	{
+	private:
+		SymbolList syms;
+		std::deque<Function*> func;
+		IRinfo() = default;
+	public:
+		~IRinfo() = default;
+		friend IRinfo AnalysisFromAST(Parser::ASTNode* ast);
 	};
+
+	IRinfo AnalysisFromAST(Parser::ASTNode* ast);
 }

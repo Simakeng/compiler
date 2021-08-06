@@ -41,16 +41,7 @@ namespace Compiler
 			{ TokenType::Not, regex(R"(^!)") },
 			{ TokenType::Comma, regex(R"(^,)") },
 
-			{ TokenType::If, regex(R"(^if)") },
-			{ TokenType::Else, regex(R"(^else)") },
-			{ TokenType::While, regex(R"(^while)") },
-			{ TokenType::Break, regex(R"(^break)") },
-			{ TokenType::Return, regex(R"(^return)") },
-			{ TokenType::Const, regex(R"(^const)") },
-			{ TokenType::Continue, regex(R"(^continue)") },
-
-			{ TokenType::Void, regex(R"(^void)") },
-			{ TokenType::Int, regex(R"(^int)") },
+			{ TokenType::Ident, regex(R"(^[a-zA-Z_]+[a-zA-Z_0-9]*)")},
 
 			{ TokenType::Pbs, regex(R"(^\()") },
 			{ TokenType::Pbe, regex(R"(^\))") },
@@ -62,7 +53,7 @@ namespace Compiler
 			{ TokenType::blank, regex(R"(^\s+)")},
 			{ TokenType::Sep, regex(R"(^;)")},
 
-			{ TokenType::Ident, regex(R"(^[a-zA-Z_]+[a-zA-Z_0-9]*)")},
+			
 			{ TokenType::Interger, regex(R"(^[0-9]+)")},
 		};
 	}
@@ -116,16 +107,40 @@ namespace Compiler
 				smatch m;
 				for (const auto& p : Lex::RegexList)
 				{
-					const auto& type = p.first;
+					auto type = p.first;
 					const auto& e = p.second;
 					if (regex_search(pread, end, m, e))
 					{
+						auto str = m.str();
+						if (type == Lex::TokenType::Ident)
+						{
+							if (str == "if")
+								type = Lex::TokenType::If;
+							else if (str == "else")
+								type = Lex::TokenType::Else;
+							else if (str == "while")
+								type = Lex::TokenType::While;
+							else if (str == "break")
+								type = Lex::TokenType::Break;
+							else if (str == "return")
+								type = Lex::TokenType::Return;
+							else if (str == "const")
+								type = Lex::TokenType::Const;
+							else if (str == "continue")
+								type = Lex::TokenType::Continue;
+							else if (str == "void")
+								type = Lex::TokenType::Void;
+							else if (str == "int")
+								type = Lex::TokenType::Int;
+						}
+
 						Lex::Token token;
 						token.type = type;
 						token._line = _linec;
 						token._start = _charc;
 						token.value.reset();
 
+			
 						switch (type)
 						{
 						case Lex::TokenType::Ident:

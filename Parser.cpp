@@ -17,7 +17,7 @@ namespace Compiler::Parser
 	// ! Auto Generated Content Start
 	const auto tokenCount = 82 ;
 	int LL1Table[tokenCount][tokenCount];
-	ProductionGenerationFunction prodRules[94];
+	ProductionGenerationFunction prodRules[93];
 	int InitLL1()
 	{
 		for (auto i = 0; i < tokenCount; i++)
@@ -68,75 +68,159 @@ namespace Compiler::Parser
 		LL1Table[__cvt(TokenType::Decl)][__cvt(TokenType::Int)] = 4;
 		LL1Table[__cvt(TokenType::Decl)][__cvt(TokenType::Void)] = 4;
 
-		// ConstDecl -> 'const' Type Ident VarDeclbody
+		// ConstDecl -> 'const' Type Ident VarDeclbody VarDeclNext
 		prodRules[5] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Const, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Type, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Ident, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarDeclbody, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarDeclNext, parent));
 		};
 
 		// Select: 'const'
 		LL1Table[__cvt(TokenType::ConstDecl)][__cvt(TokenType::Const)] = 5;
 
-		// VarOrFuncDecl -> Type Ident VarOrFuncDeclBody
+		// VarOrFuncDecl -> Type Ident VarOrFuncDeclBody VarDeclNext
 		prodRules[6] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Type, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Ident, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarOrFuncDeclBody, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarDeclNext, parent));
 		};
 
 		// Select: 'int', 'void'
 		LL1Table[__cvt(TokenType::VarOrFuncDecl)][__cvt(TokenType::Int)] = 6;
 		LL1Table[__cvt(TokenType::VarOrFuncDecl)][__cvt(TokenType::Void)] = 6;
 
-		// Type -> 'int'
+		// VarDeclNext -> ',' Ident VarDeclbody VarDeclNext
 		prodRules[7] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Comma, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Ident, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarDeclbody, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarDeclNext, parent));
+		};
+
+		// Select: ','
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Comma)] = 7;
+
+		// VarDeclNext -> ';'
+		prodRules[8] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
+		};
+
+		// Select: ';'
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Sep)] = 8;
+
+		// VarDeclNext -> ε
+		prodRules[9] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
+		};
+
+		// Select: 'while', 'return', '(', '-', '!', '{', 'int', Number, '+', Ident, 'break', 'if', '$', 'else', 'continue', 'const', '}', 'void'
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::While)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Return)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Pbs)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Minus)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Not)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Brs)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Int)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Interger)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Plus)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Ident)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Break)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::If)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::End)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Else)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Continue)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Const)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Bre)] = 9;
+		LL1Table[__cvt(TokenType::VarDeclNext)][__cvt(TokenType::Void)] = 9;
+
+		// Type -> 'int'
+		prodRules[10] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Int, parent));
 		};
 
 		// Select: 'int'
-		LL1Table[__cvt(TokenType::Type)][__cvt(TokenType::Int)] = 7;
+		LL1Table[__cvt(TokenType::Type)][__cvt(TokenType::Int)] = 10;
 
 		// Type -> 'void'
-		prodRules[8] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[11] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Void, parent));
 		};
 
 		// Select: 'void'
-		LL1Table[__cvt(TokenType::Type)][__cvt(TokenType::Void)] = 8;
+		LL1Table[__cvt(TokenType::Type)][__cvt(TokenType::Void)] = 11;
 
 		// VarOrFuncDeclBody -> VarDeclbody
-		prodRules[9] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[12] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::VarDeclbody, parent));
 		};
 
-		// Select: ';', '=', '['
-		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Sep)] = 9;
-		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Assign)] = 9;
-		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Sbs)] = 9;
+		// Select: '(', ',', 'return', '+', Ident, 'const', 'void', '!', '$', 'else', 'continue', '}', '=', '{', 'int', ';', '[', 'while', '-', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Pbs)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Comma)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Return)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Plus)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Ident)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Const)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Void)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Not)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::End)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Else)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Continue)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Bre)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Assign)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Brs)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Int)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Sep)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Sbs)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::While)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Minus)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Interger)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Break)] = 12;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::If)] = 12;
 
 		// VarOrFuncDeclBody -> FuncDeclBody
-		prodRules[10] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[13] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::FuncDeclBody, parent));
 		};
 
 		// Select: '('
-		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Pbs)] = 10;
+		LL1Table[__cvt(TokenType::VarOrFuncDeclBody)][__cvt(TokenType::Pbs)] = 13;
 
-		// VarDeclbody -> ArraySizeDecl VarDecl
-		prodRules[11] = [](ASTNode* parent, TokenType inputToken){
+		// VarDeclbody -> ArraySizeDecl VarInit
+		prodRules[14] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::ArraySizeDecl, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::VarDecl, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarInit, parent));
 		};
 
-		// Select: ';', '=', '['
-		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Sep)] = 11;
-		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Assign)] = 11;
-		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Sbs)] = 11;
+		// Select: '(', ',', 'return', '+', Ident, 'const', 'void', '!', '$', 'else', 'continue', '}', '=', '{', 'int', ';', '[', 'while', '-', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Pbs)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Comma)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Return)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Plus)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Ident)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Const)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Void)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Not)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::End)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Else)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Continue)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Bre)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Assign)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Brs)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Int)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Sep)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Sbs)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::While)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Minus)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Interger)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::Break)] = 14;
+		LL1Table[__cvt(TokenType::VarDeclbody)][__cvt(TokenType::If)] = 14;
 
 		// ArraySizeDecl -> '[' ArraySizeNum ']' ArraySizeDecl
-		prodRules[12] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[15] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Sbs, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::ArraySizeNum, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Sbe, parent));
@@ -144,72 +228,101 @@ namespace Compiler::Parser
 		};
 
 		// Select: '['
-		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Sbs)] = 12;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Sbs)] = 15;
 
 		// ArraySizeDecl -> ε
-		prodRules[13] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[16] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ';', '=', Ident
-		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Sep)] = 13;
-		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Assign)] = 13;
-		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Ident)] = 13;
-
-		// ArraySizeNum -> ε
-		prodRules[14] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
-		};
-
-		// Select: ']'
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Sbe)] = 14;
+		// Select: '(', 'return', ',', '+', Ident, 'const', 'void', '!', '$', 'else', 'continue', '}', '=', '{', 'int', ';', 'while', ')', '-', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Pbs)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Return)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Comma)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Plus)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Ident)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Const)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Void)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Not)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::End)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Else)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Continue)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Bre)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Assign)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Brs)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Int)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Sep)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::While)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Pbe)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Minus)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Interger)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::Break)] = 16;
+		LL1Table[__cvt(TokenType::ArraySizeDecl)][__cvt(TokenType::If)] = 16;
 
 		// ArraySizeNum -> ConstExp
-		prodRules[15] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[17] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::ConstExp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Minus)] = 15;
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Plus)] = 15;
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Interger)] = 15;
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Pbs)] = 15;
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Not)] = 15;
-		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Ident)] = 15;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Pbs)] = 17;
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Minus)] = 17;
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Not)] = 17;
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Interger)] = 17;
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Plus)] = 17;
+		LL1Table[__cvt(TokenType::ArraySizeNum)][__cvt(TokenType::Ident)] = 17;
 
-		// VarDecl -> ';'
-		prodRules[16] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
+		// VarInit -> ε
+		prodRules[18] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ';'
-		LL1Table[__cvt(TokenType::VarDecl)][__cvt(TokenType::Sep)] = 16;
+		// Select: '(', 'return', ',', '+', Ident, 'const', 'void', '!', '$', 'else', 'continue', '}', '{', 'int', ';', 'while', '-', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Pbs)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Return)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Comma)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Plus)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Ident)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Const)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Void)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Not)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::End)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Else)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Continue)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Bre)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Brs)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Int)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Sep)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::While)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Minus)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Interger)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Break)] = 18;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::If)] = 18;
 
-		// VarDecl -> '=' VarInitValue ';'
-		prodRules[17] = [](ASTNode* parent, TokenType inputToken){
+		// VarInit -> '=' VarInitValue
+		prodRules[19] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Assign, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarInitValue, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
 		};
 
 		// Select: '='
-		LL1Table[__cvt(TokenType::VarDecl)][__cvt(TokenType::Assign)] = 17;
+		LL1Table[__cvt(TokenType::VarInit)][__cvt(TokenType::Assign)] = 19;
 
-		// VarInitValue -> ConstInitVal
-		prodRules[18] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::ConstInitVal, parent));
+		// VarInitValue -> ConstExp
+		prodRules[20] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::ConstExp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Minus)] = 18;
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Plus)] = 18;
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Interger)] = 18;
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Pbs)] = 18;
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Not)] = 18;
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Ident)] = 18;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Pbs)] = 20;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Minus)] = 20;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Not)] = 20;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Interger)] = 20;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Plus)] = 20;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Ident)] = 20;
 
 		// VarInitValue -> '{' VarInitValue VarInitValueNext '}'
-		prodRules[19] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[21] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Brs, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarInitValue, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarInitValueNext, parent));
@@ -217,51 +330,25 @@ namespace Compiler::Parser
 		};
 
 		// Select: '{'
-		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Brs)] = 19;
+		LL1Table[__cvt(TokenType::VarInitValue)][__cvt(TokenType::Brs)] = 21;
 
-		// VarInitValueNext -> ',' VarInitValueNext
-		prodRules[20] = [](ASTNode* parent, TokenType inputToken){
+		// VarInitValueNext -> ',' VarInitValue VarInitValueNext
+		prodRules[22] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Comma, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::VarInitValue, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::VarInitValueNext, parent));
 		};
 
 		// Select: ','
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Comma)] = 20;
-
-		// VarInitValueNext -> VarInitValue
-		prodRules[21] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::VarInitValue, parent));
-		};
-
-		// Select: '-', '{', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Minus)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Brs)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Plus)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Interger)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Pbs)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Not)] = 21;
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Ident)] = 21;
+		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Comma)] = 22;
 
 		// VarInitValueNext -> ε
-		prodRules[22] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[23] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
 		// Select: '}'
-		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Bre)] = 22;
-
-		// ConstInitVal -> ConstExp
-		prodRules[23] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::ConstExp, parent));
-		};
-
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Minus)] = 23;
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Plus)] = 23;
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Interger)] = 23;
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Pbs)] = 23;
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Not)] = 23;
-		LL1Table[__cvt(TokenType::ConstInitVal)][__cvt(TokenType::Ident)] = 23;
+		LL1Table[__cvt(TokenType::VarInitValueNext)][__cvt(TokenType::Bre)] = 23;
 
 		// FuncDeclBody -> '(' FuncParamDecl FuncParamDeclNext ')' CodeBlock
 		prodRules[24] = [](ASTNode* parent, TokenType inputToken){
@@ -280,46 +367,46 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', 'int', ')'
-		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Comma)] = 25;
-		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Int)] = 25;
+		// Select: ')', ','
 		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Pbe)] = 25;
+		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Comma)] = 25;
 
-		// FuncParamDecl -> 'int' ArraySizeDecl Ident
+		// FuncParamDecl -> 'int' Ident ArraySizeDecl
 		prodRules[26] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Int, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::ArraySizeDecl, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Ident, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::ArraySizeDecl, parent));
 		};
 
 		// Select: 'int'
 		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Int)] = 26;
 
-		// FuncParamDeclNext -> ε
+		// FuncParamDecl -> Ident ArraySizeDecl
 		prodRules[27] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Ident, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::ArraySizeDecl, parent));
+		};
+
+		// Select: Ident
+		LL1Table[__cvt(TokenType::FuncParamDecl)][__cvt(TokenType::Ident)] = 27;
+
+		// FuncParamDeclNext -> ε
+		prodRules[28] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
 		// Select: ')'
-		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Pbe)] = 27;
+		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Pbe)] = 28;
 
-		// FuncParamDeclNext -> ',' FuncParamDeclNext
-		prodRules[28] = [](ASTNode* parent, TokenType inputToken){
+		// FuncParamDeclNext -> ',' FuncParamDecl FuncParamDeclNext
+		prodRules[29] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Comma, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::FuncParamDecl, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::FuncParamDeclNext, parent));
 		};
 
 		// Select: ','
-		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Comma)] = 28;
-
-		// FuncParamDeclNext -> FuncParamDecl
-		prodRules[29] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::FuncParamDecl, parent));
-		};
-
-		// Select: 'int', ')'
-		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Int)] = 29;
-		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Pbe)] = 29;
+		LL1Table[__cvt(TokenType::FuncParamDeclNext)][__cvt(TokenType::Comma)] = 29;
 
 		// CodeBlock -> '{' Stmts '}'
 		prodRules[30] = [](ASTNode* parent, TokenType inputToken){
@@ -337,22 +424,22 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Stmts, parent));
 		};
 
-		// Select: '-', 'int', 'if', '{', '+', 'void', Number, 'return', '(', '!', 'const', 'while', 'break', 'continue', Ident
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Minus)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Int)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::If)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Brs)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Plus)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Void)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Interger)] = 31;
+		// Select: 'while', 'return', '(', '-', '!', '{', 'int', Number, '+', Ident, 'break', 'if', 'continue', 'const', 'void'
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::While)] = 31;
 		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Return)] = 31;
 		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Pbs)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Minus)] = 31;
 		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Not)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Const)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::While)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Break)] = 31;
-		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Continue)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Brs)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Int)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Interger)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Plus)] = 31;
 		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Ident)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Break)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::If)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Continue)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Const)] = 31;
+		LL1Table[__cvt(TokenType::Stmts)][__cvt(TokenType::Void)] = 31;
 
 		// Stmts -> ε
 		prodRules[32] = [](ASTNode* parent, TokenType inputToken){
@@ -378,12 +465,12 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Minus)] = 34;
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Plus)] = 34;
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Interger)] = 34;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Pbs)] = 34;
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Minus)] = 34;
 		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Not)] = 34;
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Interger)] = 34;
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Plus)] = 34;
 		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Ident)] = 34;
 
 		// Stmt -> CodeBlock
@@ -394,8 +481,48 @@ namespace Compiler::Parser
 		// Select: '{'
 		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Brs)] = 35;
 
-		// Stmt -> 'if' '(' Cond ')' Stmt ElseStmt
+		// Stmt -> 'while' '(' Cond ')' Stmt
 		prodRules[36] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::While, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Pbs, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Cond, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Pbe, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Stmt, parent));
+		};
+
+		// Select: 'while'
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::While)] = 36;
+
+		// Stmt -> 'break' ';'
+		prodRules[37] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Break, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
+		};
+
+		// Select: 'break'
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Break)] = 37;
+
+		// Stmt -> 'continue' ';'
+		prodRules[38] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Continue, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
+		};
+
+		// Select: 'continue'
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Continue)] = 38;
+
+		// Stmt -> 'return' ReturnVal ';'
+		prodRules[39] = [](ASTNode* parent, TokenType inputToken){
+			parent->tokenList.push_back(CreateNode(TokenType::Return, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::ReturnVal, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
+		};
+
+		// Select: 'return'
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Return)] = 39;
+
+		// Stmt -> 'if' '(' Cond ')' Stmt ElseStmt
+		prodRules[40] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::If, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Pbs, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::Cond, parent));
@@ -405,47 +532,7 @@ namespace Compiler::Parser
 		};
 
 		// Select: 'if'
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::If)] = 36;
-
-		// Stmt -> 'while' '(' Cond ')' Stmt
-		prodRules[37] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::While, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Pbs, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Cond, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Pbe, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Stmt, parent));
-		};
-
-		// Select: 'while'
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::While)] = 37;
-
-		// Stmt -> 'break' ';'
-		prodRules[38] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Break, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
-		};
-
-		// Select: 'break'
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Break)] = 38;
-
-		// Stmt -> 'continue' ';'
-		prodRules[39] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Continue, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
-		};
-
-		// Select: 'continue'
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Continue)] = 39;
-
-		// Stmt -> 'return' ReturnVal ';'
-		prodRules[40] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Return, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::ReturnVal, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::Sep, parent));
-		};
-
-		// Select: 'return'
-		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::Return)] = 40;
+		LL1Table[__cvt(TokenType::Stmt)][__cvt(TokenType::If)] = 40;
 
 		// ReturnVal -> ε
 		prodRules[41] = [](ASTNode* parent, TokenType inputToken){
@@ -460,12 +547,12 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Exp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Minus)] = 42;
-		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Plus)] = 42;
-		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Interger)] = 42;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Pbs)] = 42;
+		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Minus)] = 42;
 		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Not)] = 42;
+		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Interger)] = 42;
+		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Plus)] = 42;
 		LL1Table[__cvt(TokenType::ReturnVal)][__cvt(TokenType::Ident)] = 42;
 
 		// ElseStmt -> 'else' Stmt
@@ -482,24 +569,23 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: '-', 'int', 'if', '{', '+', 'continue', 'void', Number, 'return', '}', '(', 'else', 'const', 'while', 'break', '!', Ident
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Minus)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Int)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::If)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Brs)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Plus)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Continue)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Void)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Interger)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Return)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Bre)] = 44;
+		// Select: '(', '-', 'while', 'return', '!', '{', 'int', Number, '+', Ident, 'break', 'if', 'continue', 'const', '}', 'void'
 		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Pbs)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Else)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Const)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Minus)] = 44;
 		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::While)] = 44;
-		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Break)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Return)] = 44;
 		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Not)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Brs)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Int)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Interger)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Plus)] = 44;
 		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Ident)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Break)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::If)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Continue)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Const)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Bre)] = 44;
+		LL1Table[__cvt(TokenType::ElseStmt)][__cvt(TokenType::Void)] = 44;
 
 		// Exp -> AddExp AssignExpBody
 		prodRules[45] = [](ASTNode* parent, TokenType inputToken){
@@ -507,12 +593,12 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::AssignExpBody, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Minus)] = 45;
-		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Plus)] = 45;
-		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Interger)] = 45;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Pbs)] = 45;
+		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Minus)] = 45;
 		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Not)] = 45;
+		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Interger)] = 45;
+		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Plus)] = 45;
 		LL1Table[__cvt(TokenType::Exp)][__cvt(TokenType::Ident)] = 45;
 
 		// ConstExp -> AddExp
@@ -520,12 +606,12 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Minus)] = 46;
-		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Plus)] = 46;
-		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Interger)] = 46;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Pbs)] = 46;
+		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Minus)] = 46;
 		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Not)] = 46;
+		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Interger)] = 46;
+		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Plus)] = 46;
 		LL1Table[__cvt(TokenType::ConstExp)][__cvt(TokenType::Ident)] = 46;
 
 		// AssignExpBody -> '=' AddExp
@@ -542,29 +628,23 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', ';', '-', ')', '+', Number, '(', ']', '!', Ident
+		// Select: ',', ')', ']', ';'
 		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Comma)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Sep)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Minus)] = 48;
 		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Pbe)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Plus)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Interger)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Pbs)] = 48;
 		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Sbe)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Not)] = 48;
-		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Ident)] = 48;
+		LL1Table[__cvt(TokenType::AssignExpBody)][__cvt(TokenType::Sep)] = 48;
 
 		// Cond -> LOrExp
 		prodRules[49] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::LOrExp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Minus)] = 49;
-		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Plus)] = 49;
-		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Interger)] = 49;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Pbs)] = 49;
+		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Minus)] = 49;
 		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Not)] = 49;
+		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Interger)] = 49;
+		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Plus)] = 49;
 		LL1Table[__cvt(TokenType::Cond)][__cvt(TokenType::Ident)] = 49;
 
 		// ArrayAcces -> '[' Exp ']' ArrayAcces
@@ -583,31 +663,41 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', ';', '>', '+', '&&', '||', '>=', '%', '<=', '==', Ident, '-', '=', ')', '{', Number, '}', '(', '<', ']', '!=', '*', '/', '!'
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Comma)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Sep)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Ge)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Plus)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::And)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Or)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Geq)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Remain)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Leq)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Eq)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Ident)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Minus)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Assign)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Pbe)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Brs)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Interger)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Bre)] = 51;
+		// Select: '(', 'return', '<', ',', '+', Ident, '%', '>', 'const', '*', 'void', ']', '==', '!', '>=', '&&', '$', '||', 'else', 'continue', '}', '=', '<=', '/', '!=', '{', 'int', ';', '-', ')', 'while', Number, 'break', 'if'
 		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Pbs)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Return)] = 51;
 		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Le)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Sbe)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Neq)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Comma)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Plus)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Ident)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Remain)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Ge)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Const)] = 51;
 		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Multi)] = 51;
-		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Divid)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Void)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Sbe)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Eq)] = 51;
 		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Not)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Geq)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::And)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::End)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Or)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Else)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Continue)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Bre)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Assign)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Leq)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Divid)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Neq)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Brs)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Int)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Sep)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Minus)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Pbe)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::While)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Interger)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::Break)] = 51;
+		LL1Table[__cvt(TokenType::ArrayAcces)][__cvt(TokenType::If)] = 51;
 
 		// PrimaryExp -> '(' Exp ')'
 		prodRules[52] = [](ASTNode* parent, TokenType inputToken){
@@ -632,32 +722,42 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::ArrayAcces, parent));
 		};
 
-		// Select: ',', ';', '>', '+', '&&', '||', '>=', '%', '<=', '==', Ident, '-', '=', ')', '{', Number, '}', '(', '<', ']', '!=', '[', '*', '/', '!'
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Comma)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sep)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Ge)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Plus)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::And)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Or)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Geq)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Remain)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Leq)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Eq)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Ident)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Minus)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Assign)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Pbe)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Brs)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Interger)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Bre)] = 54;
+		// Select: '(', ',', 'return', '<', '+', Ident, '%', '>', 'const', '*', 'void', ']', '==', '!', '>=', '&&', '$', '||', 'else', 'continue', '}', '=', '<=', '/', '!=', '{', 'int', ';', '[', '-', ')', 'while', Number, 'break', 'if'
 		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Pbs)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Comma)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Return)] = 54;
 		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Le)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sbe)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Neq)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sbs)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Plus)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Ident)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Remain)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Ge)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Const)] = 54;
 		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Multi)] = 54;
-		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Divid)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Void)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sbe)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Eq)] = 54;
 		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Not)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Geq)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::And)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::End)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Or)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Else)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Continue)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Bre)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Assign)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Leq)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Divid)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Neq)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Brs)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Int)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sep)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Sbs)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Minus)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Pbe)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::While)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Interger)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::Break)] = 54;
+		LL1Table[__cvt(TokenType::LvalAux)][__cvt(TokenType::If)] = 54;
 
 		// FuncCall -> '(' FuncRParams FuncRParamsNext ')'
 		prodRules[55] = [](ASTNode* parent, TokenType inputToken){
@@ -675,32 +775,42 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::LvalAux, parent));
 		};
 
-		// Select: ',', ';', '>', '+', '&&', '||', '>=', '%', '<=', '==', Ident, '-', '=', ')', '{', Number, '}', '(', '<', ']', '!=', '[', '*', '/', '!'
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Comma)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sep)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Ge)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Plus)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::And)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Or)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Geq)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Remain)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Leq)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Eq)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Ident)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Minus)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Assign)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Pbe)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Brs)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Interger)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Bre)] = 56;
+		// Select: '(', 'return', '<', ',', '+', Ident, '%', '>', 'const', '*', 'void', ']', '==', '!', '>=', '&&', '$', 'else', '||', 'continue', '}', '=', '<=', '/', '!=', '{', 'int', ';', '[', '-', ')', 'while', Number, 'break', 'if'
 		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Pbs)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Return)] = 56;
 		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Le)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sbe)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Neq)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sbs)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Comma)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Plus)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Ident)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Remain)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Ge)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Const)] = 56;
 		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Multi)] = 56;
-		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Divid)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Void)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sbe)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Eq)] = 56;
 		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Not)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Geq)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::And)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::End)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Else)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Or)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Continue)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Bre)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Assign)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Leq)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Divid)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Neq)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Brs)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Int)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sep)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Sbs)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Minus)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Pbe)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::While)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Interger)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::Break)] = 56;
+		LL1Table[__cvt(TokenType::LvalAuxOrFuncCall)][__cvt(TokenType::If)] = 56;
 
 		// LvalAuxOrFuncCall -> FuncCall
 		prodRules[57] = [](ASTNode* parent, TokenType inputToken){
@@ -715,9 +825,9 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::PrimaryExp, parent));
 		};
 
-		// Select: '(', Number
-		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Pbs)] = 58;
+		// Select: Number, '('
 		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Interger)] = 58;
+		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Pbs)] = 58;
 
 		// UnaryExp -> Ident LvalAuxOrFuncCall
 		prodRules[59] = [](ASTNode* parent, TokenType inputToken){
@@ -734,9 +844,9 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::UnaryExp, parent));
 		};
 
-		// Select: '-', '+', '!'
-		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Minus)] = 60;
+		// Select: '+', '-', '!'
 		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Plus)] = 60;
+		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Minus)] = 60;
 		LL1Table[__cvt(TokenType::UnaryExp)][__cvt(TokenType::Not)] = 60;
 
 		// FuncRParams -> ε
@@ -744,27 +854,21 @@ namespace Compiler::Parser
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', '-', ')', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Comma)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Minus)] = 61;
+		// Select: ')', ','
 		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Pbe)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Plus)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Interger)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Pbs)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Not)] = 61;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Ident)] = 61;
+		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Comma)] = 61;
 
 		// FuncRParams -> Exp
 		prodRules[62] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Exp, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Minus)] = 62;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Plus)] = 62;
-		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Interger)] = 62;
+		// Select: '(', '-', '!', Number, '+', Ident
 		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Pbs)] = 62;
+		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Minus)] = 62;
 		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Not)] = 62;
+		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Interger)] = 62;
+		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Plus)] = 62;
 		LL1Table[__cvt(TokenType::FuncRParams)][__cvt(TokenType::Ident)] = 62;
 
 		// FuncRParamsNext -> ε
@@ -775,369 +879,368 @@ namespace Compiler::Parser
 		// Select: ')'
 		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Pbe)] = 63;
 
-		// FuncRParamsNext -> ',' FuncRParamsNext
+		// FuncRParamsNext -> ',' FuncRParams FuncRParamsNext
 		prodRules[64] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Comma, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::FuncRParams, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::FuncRParamsNext, parent));
 		};
 
 		// Select: ','
 		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Comma)] = 64;
 
-		// FuncRParamsNext -> Exp
-		prodRules[65] = [](ASTNode* parent, TokenType inputToken){
-			parent->tokenList.push_back(CreateNode(TokenType::Exp, parent));
-		};
-
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Minus)] = 65;
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Plus)] = 65;
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Interger)] = 65;
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Pbs)] = 65;
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Not)] = 65;
-		LL1Table[__cvt(TokenType::FuncRParamsNext)][__cvt(TokenType::Ident)] = 65;
-
 		// UnaryOp -> '+'
-		prodRules[66] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[65] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Plus, parent));
 		};
 
 		// Select: '+'
-		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Plus)] = 66;
+		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Plus)] = 65;
 
 		// UnaryOp -> '-'
-		prodRules[67] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[66] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Minus, parent));
 		};
 
 		// Select: '-'
-		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Minus)] = 67;
+		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Minus)] = 66;
 
 		// UnaryOp -> '!'
-		prodRules[68] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[67] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Not, parent));
 		};
 
 		// Select: '!'
-		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Not)] = 68;
+		LL1Table[__cvt(TokenType::UnaryOp)][__cvt(TokenType::Not)] = 67;
 
 		// MulExp -> UnaryExp MulExpNext
-		prodRules[69] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[68] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::UnaryExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::MulExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Minus)] = 69;
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Plus)] = 69;
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Interger)] = 69;
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Pbs)] = 69;
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Not)] = 69;
-		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Ident)] = 69;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Pbs)] = 68;
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Minus)] = 68;
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Not)] = 68;
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Interger)] = 68;
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Plus)] = 68;
+		LL1Table[__cvt(TokenType::MulExp)][__cvt(TokenType::Ident)] = 68;
 
 		// MulExpNext -> ε
-		prodRules[70] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[69] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', ';', '>', '+', '&&', '||', '>=', '%', '<=', '==', Ident, '=', '-', ')', '{', Number, '}', '<', '(', ']', '!=', '*', '/', '!'
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Comma)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Sep)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Ge)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Plus)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::And)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Or)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Geq)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Remain)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Leq)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Eq)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Ident)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Assign)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Minus)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Pbe)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Brs)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Interger)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Bre)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Le)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Pbs)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Sbe)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Neq)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Multi)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Divid)] = 70;
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Not)] = 70;
+		// Select: '(', 'return', '<', ',', '+', Ident, '>', 'const', 'void', ']', '==', '!', '>=', '&&', '$', '||', 'else', 'continue', '}', '=', '<=', '!=', '{', 'int', ';', '-', ')', 'while', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Pbs)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Return)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Le)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Comma)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Plus)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Ident)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Ge)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Const)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Void)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Sbe)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Eq)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Not)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Geq)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::And)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::End)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Or)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Else)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Continue)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Bre)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Assign)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Leq)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Neq)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Brs)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Int)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Sep)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Minus)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Pbe)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::While)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Interger)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Break)] = 69;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::If)] = 69;
 
-		// MulExpNext -> '*' MulExp MulExpNext
-		prodRules[71] = [](ASTNode* parent, TokenType inputToken){
+		// MulExpNext -> '*' UnaryExp MulExpNext
+		prodRules[70] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Multi, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::UnaryExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::MulExpNext, parent));
 		};
 
 		// Select: '*'
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Multi)] = 71;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Multi)] = 70;
 
-		// MulExpNext -> '/' MulExp MulExpNext
-		prodRules[72] = [](ASTNode* parent, TokenType inputToken){
+		// MulExpNext -> '/' UnaryExp MulExpNext
+		prodRules[71] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Divid, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::UnaryExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::MulExpNext, parent));
 		};
 
 		// Select: '/'
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Divid)] = 72;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Divid)] = 71;
 
-		// MulExpNext -> '%' MulExp MulExpNext
-		prodRules[73] = [](ASTNode* parent, TokenType inputToken){
+		// MulExpNext -> '%' UnaryExp MulExpNext
+		prodRules[72] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Remain, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::UnaryExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::MulExpNext, parent));
 		};
 
 		// Select: '%'
-		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Remain)] = 73;
+		LL1Table[__cvt(TokenType::MulExpNext)][__cvt(TokenType::Remain)] = 72;
 
 		// AddExp -> MulExp AddExpNext
-		prodRules[74] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[73] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::AddExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Minus)] = 74;
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Plus)] = 74;
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Interger)] = 74;
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Pbs)] = 74;
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Not)] = 74;
-		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Ident)] = 74;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Pbs)] = 73;
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Minus)] = 73;
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Not)] = 73;
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Interger)] = 73;
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Plus)] = 73;
+		LL1Table[__cvt(TokenType::AddExp)][__cvt(TokenType::Ident)] = 73;
 
 		// AddExpNext -> ε
-		prodRules[75] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[74] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ',', ';', '>', '+', '&&', '||', '>=', '<=', '==', Ident, '=', '-', ')', '{', Number, '}', '(', '<', ']', '!=', '!'
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Comma)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Sep)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Ge)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Plus)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::And)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Or)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Geq)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Leq)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Eq)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Ident)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Assign)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Minus)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Pbe)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Brs)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Interger)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Bre)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Pbs)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Le)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Sbe)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Neq)] = 75;
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Not)] = 75;
+		// Select: '(', ',', '<', 'return', '+', Ident, '>', 'const', 'void', ']', '==', '!', '>=', '&&', '$', 'else', '||', 'continue', '}', '=', '<=', '!=', '{', 'int', ';', ')', 'while', '-', Number, 'break', 'if'
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Pbs)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Comma)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Le)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Return)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Plus)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Ident)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Ge)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Const)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Void)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Sbe)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Eq)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Not)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Geq)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::And)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::End)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Else)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Or)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Continue)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Bre)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Assign)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Leq)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Neq)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Brs)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Int)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Sep)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Pbe)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::While)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Minus)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Interger)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Break)] = 74;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::If)] = 74;
 
-		// AddExpNext -> '+' AddExp AddExpNext
-		prodRules[76] = [](ASTNode* parent, TokenType inputToken){
+		// AddExpNext -> '+' MulExp AddExpNext
+		prodRules[75] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Plus, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::AddExpNext, parent));
 		};
 
 		// Select: '+'
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Plus)] = 76;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Plus)] = 75;
 
-		// AddExpNext -> '-' AddExp AddExpNext
-		prodRules[77] = [](ASTNode* parent, TokenType inputToken){
+		// AddExpNext -> '-' MulExp AddExpNext
+		prodRules[76] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Minus, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::MulExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::AddExpNext, parent));
 		};
 
 		// Select: '-'
-		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Minus)] = 77;
+		LL1Table[__cvt(TokenType::AddExpNext)][__cvt(TokenType::Minus)] = 76;
 
 		// RelExp -> AddExp RelExpNext
-		prodRules[78] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[77] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::RelExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Minus)] = 78;
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Plus)] = 78;
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Interger)] = 78;
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Pbs)] = 78;
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Not)] = 78;
-		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Ident)] = 78;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Pbs)] = 77;
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Minus)] = 77;
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Not)] = 77;
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Interger)] = 77;
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Plus)] = 77;
+		LL1Table[__cvt(TokenType::RelExp)][__cvt(TokenType::Ident)] = 77;
 
 		// RelExpNext -> ε
-		prodRules[79] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[78] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: '>', ')', '&&', '||', '<', '>=', '<=', '==', '!='
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Ge)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Pbe)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::And)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Or)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Le)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Geq)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Leq)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Eq)] = 79;
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Neq)] = 79;
+		// Select: '!=', ')', '==', '&&', '||'
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Neq)] = 78;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Pbe)] = 78;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Eq)] = 78;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::And)] = 78;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Or)] = 78;
 
-		// RelExpNext -> '<' RelExp RelExpNext
-		prodRules[80] = [](ASTNode* parent, TokenType inputToken){
+		// RelExpNext -> '<' AddExp RelExpNext
+		prodRules[79] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Le, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::RelExpNext, parent));
 		};
 
 		// Select: '<'
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Le)] = 80;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Le)] = 79;
 
-		// RelExpNext -> '>' RelExp RelExpNext
-		prodRules[81] = [](ASTNode* parent, TokenType inputToken){
+		// RelExpNext -> '>' AddExp RelExpNext
+		prodRules[80] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Ge, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::RelExpNext, parent));
 		};
 
 		// Select: '>'
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Ge)] = 81;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Ge)] = 80;
 
-		// RelExpNext -> '<=' RelExp RelExpNext
-		prodRules[82] = [](ASTNode* parent, TokenType inputToken){
+		// RelExpNext -> '<=' AddExp RelExpNext
+		prodRules[81] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Leq, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::RelExpNext, parent));
 		};
 
 		// Select: '<='
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Leq)] = 82;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Leq)] = 81;
 
-		// RelExpNext -> '>=' RelExp RelExpNext
-		prodRules[83] = [](ASTNode* parent, TokenType inputToken){
+		// RelExpNext -> '>=' AddExp RelExpNext
+		prodRules[82] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Geq, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::AddExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::RelExpNext, parent));
 		};
 
 		// Select: '>='
-		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Geq)] = 83;
+		LL1Table[__cvt(TokenType::RelExpNext)][__cvt(TokenType::Geq)] = 82;
 
 		// EqExp -> RelExp EqExpNext
-		prodRules[84] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[83] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::EqExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Minus)] = 84;
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Plus)] = 84;
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Interger)] = 84;
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Pbs)] = 84;
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Not)] = 84;
-		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Ident)] = 84;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Pbs)] = 83;
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Minus)] = 83;
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Not)] = 83;
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Interger)] = 83;
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Plus)] = 83;
+		LL1Table[__cvt(TokenType::EqExp)][__cvt(TokenType::Ident)] = 83;
 
 		// EqExpNext -> ε
-		prodRules[85] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[84] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
-		// Select: ')', '&&', '||', '==', '!='
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Pbe)] = 85;
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::And)] = 85;
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Or)] = 85;
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Eq)] = 85;
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Neq)] = 85;
+		// Select: '||', ')', '&&'
+		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Or)] = 84;
+		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Pbe)] = 84;
+		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::And)] = 84;
 
-		// EqExpNext -> '==' EqExp EqExpNext
-		prodRules[86] = [](ASTNode* parent, TokenType inputToken){
+		// EqExpNext -> '==' RelExp EqExpNext
+		prodRules[85] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Eq, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::EqExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::EqExpNext, parent));
 		};
 
 		// Select: '=='
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Eq)] = 86;
+		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Eq)] = 85;
 
-		// EqExpNext -> '!=' EqExp EqExpNext
-		prodRules[87] = [](ASTNode* parent, TokenType inputToken){
+		// EqExpNext -> '!=' RelExp EqExpNext
+		prodRules[86] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Neq, parent));
-			parent->tokenList.push_back(CreateNode(TokenType::EqExp, parent));
+			parent->tokenList.push_back(CreateNode(TokenType::RelExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::EqExpNext, parent));
 		};
 
 		// Select: '!='
-		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Neq)] = 87;
+		LL1Table[__cvt(TokenType::EqExpNext)][__cvt(TokenType::Neq)] = 86;
 
 		// LAndExp -> EqExp LAndExpNext
-		prodRules[88] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[87] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::EqExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::LAndExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Minus)] = 88;
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Plus)] = 88;
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Interger)] = 88;
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Pbs)] = 88;
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Not)] = 88;
-		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Ident)] = 88;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Pbs)] = 87;
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Minus)] = 87;
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Not)] = 87;
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Interger)] = 87;
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Plus)] = 87;
+		LL1Table[__cvt(TokenType::LAndExp)][__cvt(TokenType::Ident)] = 87;
 
 		// LAndExpNext -> ε
-		prodRules[89] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[88] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
 		// Select: '||', ')'
-		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::Or)] = 89;
-		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::Pbe)] = 89;
+		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::Or)] = 88;
+		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::Pbe)] = 88;
 
 		// LAndExpNext -> '&&' EqExp LAndExpNext
-		prodRules[90] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[89] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::And, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::EqExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::LAndExpNext, parent));
 		};
 
 		// Select: '&&'
-		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::And)] = 90;
+		LL1Table[__cvt(TokenType::LAndExpNext)][__cvt(TokenType::And)] = 89;
 
 		// LOrExp -> LAndExp LOrExpNext
-		prodRules[91] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[90] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::LAndExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::LOrExpNext, parent));
 		};
 
-		// Select: '-', '+', Number, '(', '!', Ident
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Minus)] = 91;
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Plus)] = 91;
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Interger)] = 91;
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Pbs)] = 91;
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Not)] = 91;
-		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Ident)] = 91;
+		// Select: '(', '-', '!', Number, '+', Ident
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Pbs)] = 90;
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Minus)] = 90;
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Not)] = 90;
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Interger)] = 90;
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Plus)] = 90;
+		LL1Table[__cvt(TokenType::LOrExp)][__cvt(TokenType::Ident)] = 90;
 
 		// LOrExpNext -> '||' LAndExp LOrExpNext
-		prodRules[92] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[91] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Or, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::LAndExp, parent));
 			parent->tokenList.push_back(CreateNode(TokenType::LOrExpNext, parent));
 		};
 
 		// Select: '||'
-		LL1Table[__cvt(TokenType::LOrExpNext)][__cvt(TokenType::Or)] = 92;
+		LL1Table[__cvt(TokenType::LOrExpNext)][__cvt(TokenType::Or)] = 91;
 
 		// LOrExpNext -> ε
-		prodRules[93] = [](ASTNode* parent, TokenType inputToken){
+		prodRules[92] = [](ASTNode* parent, TokenType inputToken){
 			parent->tokenList.push_back(CreateNode(TokenType::Empty, parent));
 		};
 
 		// Select: ')'
-		LL1Table[__cvt(TokenType::LOrExpNext)][__cvt(TokenType::Pbe)] = 93;
+		LL1Table[__cvt(TokenType::LOrExpNext)][__cvt(TokenType::Pbe)] = 92;
 		
 		return -1;
 	}
@@ -1183,52 +1286,52 @@ namespace Compiler::Parser
 		case __cvt(TokenType::Ident): return "[Ident]";
 		case __cvt(TokenType::Interger): return "[Number]";
 		
-		case __cvt(TokenType::LAndExp): return "[LAndExp]";
-		case __cvt(TokenType::ArraySizeDecl): return "[ArraySizeDecl]";
-		case __cvt(TokenType::VarDecl): return "[VarDecl]";
-		case __cvt(TokenType::LvalAux): return "[LvalAux]";
+		case __cvt(TokenType::ArraySizeNum): return "[ArraySizeNum]";
+		case __cvt(TokenType::VarInit): return "[VarInit]";
+		case __cvt(TokenType::FuncParamDeclNext): return "[FuncParamDeclNext]";
 		case __cvt(TokenType::FuncRParamsNext): return "[FuncRParamsNext]";
+		case __cvt(TokenType::VarOrFuncDeclBody): return "[VarOrFuncDeclBody]";
+		case __cvt(TokenType::Decl): return "[Decl]";
+		case __cvt(TokenType::Exp): return "[Exp]";
+		case __cvt(TokenType::ConstExp): return "[ConstExp]";
+		case __cvt(TokenType::AssignExpBody): return "[AssignExpBody]";
+		case __cvt(TokenType::VarInitValue): return "[VarInitValue]";
+		case __cvt(TokenType::LOrExpNext): return "[LOrExpNext]";
+		case __cvt(TokenType::Stmt): return "[Stmt]";
+		case __cvt(TokenType::RelExp): return "[RelExp]";
+		case __cvt(TokenType::Stmts): return "[Stmts]";
+		case __cvt(TokenType::CompUnit): return "[CompUnit]";
+		case __cvt(TokenType::ElseStmt): return "[ElseStmt]";
+		case __cvt(TokenType::ArraySizeDecl): return "[ArraySizeDecl]";
+		case __cvt(TokenType::AddExp): return "[AddExp]";
+		case __cvt(TokenType::AddExpNext): return "[AddExpNext]";
+		case __cvt(TokenType::VarDeclbody): return "[VarDeclbody]";
+		case __cvt(TokenType::ReturnVal): return "[ReturnVal]";
+		case __cvt(TokenType::EqExp): return "[EqExp]";
+		case __cvt(TokenType::FuncParamDecl): return "[FuncParamDecl]";
+		case __cvt(TokenType::UnaryOp): return "[UnaryOp]";
+		case __cvt(TokenType::EqExpNext): return "[EqExpNext]";
+		case __cvt(TokenType::CodeBlock): return "[CodeBlock]";
 		case __cvt(TokenType::PrimaryExp): return "[PrimaryExp]";
 		case __cvt(TokenType::UnaryExp): return "[UnaryExp]";
-		case __cvt(TokenType::LOrExpNext): return "[LOrExpNext]";
-		case __cvt(TokenType::AddExp): return "[AddExp]";
-		case __cvt(TokenType::FuncDeclBody): return "[FuncDeclBody]";
-		case __cvt(TokenType::VarOrFuncDecl): return "[VarOrFuncDecl]";
-		case __cvt(TokenType::EqExp): return "[EqExp]";
-		case __cvt(TokenType::ArrayAcces): return "[ArrayAcces]";
-		case __cvt(TokenType::EqExpNext): return "[EqExpNext]";
-		case __cvt(TokenType::RelExpNext): return "[RelExpNext]";
-		case __cvt(TokenType::ReturnVal): return "[ReturnVal]";
-		case __cvt(TokenType::ConstInitVal): return "[ConstInitVal]";
-		case __cvt(TokenType::ConstExp): return "[ConstExp]";
-		case __cvt(TokenType::Cond): return "[Cond]";
-		case __cvt(TokenType::LOrExp): return "[LOrExp]";
-		case __cvt(TokenType::MulExpNext): return "[MulExpNext]";
-		case __cvt(TokenType::MulExp): return "[MulExp]";
-		case __cvt(TokenType::Stmts): return "[Stmts]";
-		case __cvt(TokenType::FuncCall): return "[FuncCall]";
-		case __cvt(TokenType::Exp): return "[Exp]";
-		case __cvt(TokenType::CompUnit): return "[CompUnit]";
-		case __cvt(TokenType::FuncParamDecl): return "[FuncParamDecl]";
-		case __cvt(TokenType::FuncParamDeclNext): return "[FuncParamDeclNext]";
-		case __cvt(TokenType::LvalAuxOrFuncCall): return "[LvalAuxOrFuncCall]";
-		case __cvt(TokenType::RelExp): return "[RelExp]";
-		case __cvt(TokenType::Stmt): return "[Stmt]";
-		case __cvt(TokenType::CodeBlock): return "[CodeBlock]";
-		case __cvt(TokenType::ElseStmt): return "[ElseStmt]";
-		case __cvt(TokenType::UnaryOp): return "[UnaryOp]";
-		case __cvt(TokenType::ArraySizeNum): return "[ArraySizeNum]";
-		case __cvt(TokenType::VarDeclbody): return "[VarDeclbody]";
-		case __cvt(TokenType::VarInitValueNext): return "[VarInitValueNext]";
-		case __cvt(TokenType::LAndExpNext): return "[LAndExpNext]";
-		case __cvt(TokenType::VarInitValue): return "[VarInitValue]";
 		case __cvt(TokenType::FuncRParams): return "[FuncRParams]";
-		case __cvt(TokenType::AddExpNext): return "[AddExpNext]";
-		case __cvt(TokenType::ConstDecl): return "[ConstDecl]";
-		case __cvt(TokenType::VarOrFuncDeclBody): return "[VarOrFuncDeclBody]";
+		case __cvt(TokenType::LOrExp): return "[LOrExp]";
+		case __cvt(TokenType::ArrayAcces): return "[ArrayAcces]";
+		case __cvt(TokenType::FuncDeclBody): return "[FuncDeclBody]";
+		case __cvt(TokenType::VarDeclNext): return "[VarDeclNext]";
 		case __cvt(TokenType::Type): return "[Type]";
-		case __cvt(TokenType::Decl): return "[Decl]";
-		case __cvt(TokenType::AssignExpBody): return "[AssignExpBody]";
+		case __cvt(TokenType::LAndExpNext): return "[LAndExpNext]";
+		case __cvt(TokenType::RelExpNext): return "[RelExpNext]";
+		case __cvt(TokenType::LvalAuxOrFuncCall): return "[LvalAuxOrFuncCall]";
+		case __cvt(TokenType::LAndExp): return "[LAndExp]";
+		case __cvt(TokenType::VarInitValueNext): return "[VarInitValueNext]";
+		case __cvt(TokenType::Cond): return "[Cond]";
+		case __cvt(TokenType::VarOrFuncDecl): return "[VarOrFuncDecl]";
+		case __cvt(TokenType::MulExp): return "[MulExp]";
+		case __cvt(TokenType::MulExpNext): return "[MulExpNext]";
+		case __cvt(TokenType::LvalAux): return "[LvalAux]";
+		case __cvt(TokenType::FuncCall): return "[FuncCall]";
+		case __cvt(TokenType::ConstDecl): return "[ConstDecl]";
 		case __cvt(TokenType::Empty): return u8"[ε]";
 		default:
 			return "[Unknown]";
@@ -1247,20 +1350,14 @@ namespace Compiler::Parser
 	}
 	// VarOrFuncDecl -> Type Ident VarOrFuncDeclBody
 
-	void Magic(ASTNode* targit_node)
-	{
-		targit_node->tokenList.push_back(CreateNode(TokenType::Type, targit_node));
-		targit_node->tokenList.push_back(CreateNode(TokenType::Ident, targit_node));
-		targit_node->tokenList.push_back(CreateNode(TokenType::VarOrFuncDeclBody, targit_node));
-
-	}
-
 	void MatchTokensForNode(deque<Lex::Token>& tokenList, Lex::Token& inputToken, ASTNode* node)
 	{
 		auto nodeType = node->type;
 
-		prodRules[LL1Table[__cvt(nodeType)][__cvt(inputToken.type)]](node, static_cast<TokenType>(inputToken.type));
-
+		auto rule = prodRules[LL1Table[__cvt(nodeType)][__cvt(inputToken.type)]];
+		rule(node, static_cast<TokenType>(inputToken.type));
+		if (rule == prodRules[0])
+			Console::Log("at line:", inputToken._line, ":", inputToken._start, Level::Error);
 		for (auto& subnode : node->tokenList)
 		{
 			// 匹配到终结符

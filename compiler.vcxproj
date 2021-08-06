@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyGeneration.cpp" />
     <ClCompile Include="ASTUtils.cpp" />
+    <ClCompile Include="IR.cpp" />
     <ClCompile Include="LexParser.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />

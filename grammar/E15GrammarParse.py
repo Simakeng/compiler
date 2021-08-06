@@ -102,6 +102,10 @@ def init_be_null():
                 break
         searched.add(sntt)
 
+    # 打补丁：
+    can_ntt_be_null['VarDeclbody'] = True
+    can_ntt_be_null['VarOrFuncDeclBody'] = True
+
     # 筛选出所有产生式都包含终结符的“绝对不会为空的非终结符”
     confirmed_not_null = set()
     for k, v in can_ntt_be_null.items():
@@ -180,6 +184,9 @@ def get_first(ntt):
 
     return list(set(result))
 
+# 函数存在问题 ：计算follow集没考虑产生式的前后包含关系
+# 目前通过打补丁尝试解决
+# 如果发现搞不定，请重构这函数
 
 def get_follow(ntt, n=0):
     # 别问，问就是 if else
@@ -228,9 +235,11 @@ for token in non_terminal_tokens:
     print(token, ':', ' '.join(first_set[token]))
 print("\nFollow集：")
 for token in non_terminal_tokens:
-    if(token == 'LvalAuxOrFuncCall'):
-        print('f')
     follow_set[token] = get_follow(token)
+    # 补丁：
+    if(token == 'ElseStmt'):
+        i = follow_set[token].index("'else'")
+        del follow_set[token][i]
     print(token, ':', ' '.join(follow_set[token]))
 
 
@@ -249,6 +258,7 @@ def get_select(rid):
     elm = rule['element']
     tokens = rule['tokens'].split(' ')
     result = []
+
 
     for token in tokens:
         if(token in terminal_tokens):

@@ -41,6 +41,9 @@
     <ClCompile Include="ASTUtils.cpp">
       <Filter>AST</Filter>
     </ClCompile>
+    <ClCompile Include="IR.cpp">
+      <Filter>IR</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lex.h">

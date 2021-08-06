@@ -34,11 +34,11 @@ VarInitValueNext -> ε
 FuncDeclBody -> '(' FuncParamDecl FuncParamDeclNext ')' CodeBlock
 
 FuncParamDecl -> ε
-FuncParamDecl -> 'int' Ident ArraySizeDecl
-FuncParamDecl -> Ident ArraySizeDecl
+FuncParamDecl -> 'int' ArraySizeDecl Ident
 
 FuncParamDeclNext -> ε
-FuncParamDeclNext -> ',' FuncParamDecl FuncParamDeclNext
+FuncParamDeclNext -> ',' FuncParamDeclNext
+FuncParamDeclNext -> FuncParamDecl
 
 CodeBlock -> '{' Stmts '}'
 
@@ -48,12 +48,11 @@ Stmts -> ε
 Stmt -> Decl
 Stmt -> Exp ';'
 Stmt -> CodeBlock 
+Stmt -> 'if' '(' Cond ')' Stmt ElseStmt 
 Stmt -> 'while' '(' Cond ')' Stmt
 Stmt -> 'break' ';'
 Stmt -> 'continue' ';'
 Stmt -> 'return' ReturnVal ';'
-
-Stmt -> 'if' '(' Cond ')' Stmt ElseStmt 
 
 ReturnVal -> ε
 ReturnVal -> Exp
@@ -90,10 +89,9 @@ UnaryExp -> UnaryOp UnaryExp
 
 FuncRParams -> ε
 FuncRParams -> Exp
-
 FuncRParamsNext -> ε
-FuncRParamsNext -> ',' FuncRParams FuncRParamsNext
-
+FuncRParamsNext -> ',' FuncRParamsNext
+FuncRParamsNext -> Exp
 
 UnaryOp -> '+'
 UnaryOp -> '-'
