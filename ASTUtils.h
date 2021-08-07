@@ -14,6 +14,8 @@ namespace Compiler::AST
 
 	void StripHumanReadable(ASTNode* ast);
 
+	void StripArrayInitValue(ASTNode* ast);
+
 	IR::Decl::Type GetDeclType(ASTNode* ast);
 
 	std::deque<ASTNode*> SearchNodeDecls(ASTNode* ast);
@@ -32,11 +34,17 @@ namespace Compiler::AST
 
 	std::deque<int> GetVariableSize(ASTNode* var);
 
-	IR::ConstDecl* AnalysisVar(ASTNode* var);
+	IR::ConstDecl* AnalysisConstDecl(ASTNode* var, IR::SymbolList* syms);
+
+	IR::FunctionDecl* AnalysisFunction(ASTNode* var, IR::SymbolList* syms);
+
+	IR::VarDecl* AnalysisVarDecl(ASTNode* var, IR::SymbolList* syms);
+
+	IR::ConstDecl::VType GetReturnValueType(ASTNode* var);
 
 	int GetNumberValue(ASTNode* number);
 
-	int EvalConstExpr(ASTNode* ConstExpr);
+	int EvalConstExpr(ASTNode* expr, IR::SymbolList* syms = nullptr);
 
 	template<Parser::TokenType t>
 	auto GetChild(ASTNode* ast)

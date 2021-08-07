@@ -14,17 +14,23 @@ int main(int argc, const char* argv[])
 	auto sy_in = argv[1];
 	auto ast_out = argv[2];
 
-	LexParser lexer("test/vars.sy");
+	//sy_in = "test/vars.sy";
+	//ast_out = "out.ast";
+
+
+	LexParser lexer(sy_in);
 	auto tokens = lexer.GetTokens();
 	auto ast = Parser::ParserTokens(tokens);
 
 	AST::StripEmptyNode(ast);
 	AST::StripExprNode(ast);
 	AST::StripHumanReadable(ast);
+	AST::StripArrayInitValue(ast);
+
 
 	auto ast_txt = VisualizeAST(ast);
 
-	FILE* fp = fopen("out.ast", "wb");
+	FILE* fp = fopen(ast_out, "wb");
 	fwrite(ast_txt.c_str(), 1, ast_txt.size(), fp);
 	fclose(fp);
 

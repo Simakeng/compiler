@@ -110,5 +110,6 @@ namespace Compiler
 	public:
 		static void SetExitCode(int code);
 		static int GetExitCode();
+		static void Terminate [[ noreturn ]] (int exit_code);
 	};
 }

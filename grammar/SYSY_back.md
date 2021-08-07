@@ -21,6 +21,8 @@ ArraySizeDecl -> '[' ArraySizeNum ']' ArraySizeDecl
 ArraySizeDecl -> ε
 
 ArraySizeNum -> ConstExp
+ArraySizeNum -> ArrayPtrEmpty
+ArrayPtrEmpty -> ε
 
 VarInit -> ε
 VarInit -> '=' VarInitValue 

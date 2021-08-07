@@ -45,11 +45,13 @@ namespace Compiler::IR
 			OR,
 
 			FUNC_CALL,
+			DECL_IMPORT, // declare param import
+			DECL_VALUE,	// declare expr value
+			SET_VALUE, // assign value to variable
 
-			JMP,
 		} type;
-		int Op1ID, Op2ID;
-		int id;
+		Operation* Opend1 = nullptr;
+		Operation* Opend2 = nullptr;
 	};
 
 	struct Decl
@@ -58,14 +60,14 @@ namespace Compiler::IR
 		{
 			Const,
 			Var,
+			Param,
 			Function
 		} type;
 		std::string name;
 		Decl(Type _type) : type(_type) {};
 		~Decl() = default;
 	};
-
-	struct Var : public Decl
+	struct ConstDecl : public Decl
 	{
 		enum class VType
 		{
@@ -73,33 +75,43 @@ namespace Compiler::IR
 			INT,
 			INTPTR
 		} vtype;
-		std::string name;
 		std::deque<int> size;
 		std::vector<int> initValue;
 
-		Var() : Decl(Type::Var) {}
-		Var(Type _) : Decl(_) {}
+		ConstDecl() : Decl(Type::Const) {}
+		ConstDecl(Type _) : Decl(_) {}
+
+
 	};
 
-
-	struct ConstDecl : public Var
-	{
-		ConstDecl() : Var(Type::Const) {}
-	};
-
-
-	class CodeBlock : public Stmt
-	{
-		std::deque<Var> localVariables;
-		std::deque<Var> localConstants;
-		CodeBlock* parentBlock = nullptr;
-	};
+	class CodeBlock;
 
 	class Expr : public Stmt
 	{
+		
 		std::deque<Operation> ops;
 		CodeBlock* parentCB;
 	};
+
+	struct InitExprs
+	{
+		std::deque <int> addr;
+		Expr expr;
+	};
+
+	struct VarDecl : public ConstDecl
+	{
+		std::deque<InitExprs> initExprs;
+		VarDecl() : ConstDecl(Type::Var) {}
+	};
+
+	class CodeBlock : public Stmt
+	{
+		std::deque<VarDecl> localVariables;
+		std::deque<VarDecl> localConstants;
+		CodeBlock* parentBlock = nullptr;
+	};
+
 
 	class If : public Stmt
 	{
@@ -119,26 +131,31 @@ namespace Compiler::IR
 		std::deque<Decl*> decls;
 		std::unordered_map<std::string, Decl*> index;
 		SymbolList* parentList = nullptr;
+
+		Decl* Index(const std::string& name);
+		void AppendDecl(Decl* decl);
 	};
 
-	class Function : public Decl
+	struct FunctionDecl : public Decl
 	{
-		std::string name;
-		std::deque<Var> params;
-		Var::Type returnValueType;
+		SymbolList params;
+		ConstDecl::VType returnValueType;
 
 		CodeBlock procedures;
+
+		FunctionDecl() :Decl(Decl::Type::Function) {};
+		~FunctionDecl() = default;
 	};
 
 
 
-	
+
 
 	class IRinfo
 	{
 	private:
 		SymbolList syms;
-		std::deque<Function*> func;
+		std::deque<FunctionDecl*> func;
 		IRinfo() = default;
 	public:
 		~IRinfo() = default;

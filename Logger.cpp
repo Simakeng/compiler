@@ -55,4 +55,9 @@ namespace Compiler
 		return exitCode;
 	}
 
+	void Console::Terminate [[ noreturn ]] (int exit_code)
+	{
+		std::exit(exit_code);
+	}
+
 }
