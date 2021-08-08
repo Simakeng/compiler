@@ -27,7 +27,10 @@ int main(int argc, int argv[][5])
     }
     else
         b = 3 + 1;
-
+    while(b < 100)
+    {
+        b = b + 1;
+    }
     int d = func();
     return 0;
 }

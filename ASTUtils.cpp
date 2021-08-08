@@ -12,6 +12,8 @@ namespace Compiler::AST
 
 	IR::Stmt* AnalysisIfElseStmt(ASTNode* exp, IR::SymbolList* syms);
 
+	IR::Stmt* AnalysisWhileStmt(ASTNode* exp, IR::SymbolList* syms);
+
 	void AnalysisCodeBlock(ASTNode* block, IR::CodeBlock& cb);
 
 	auto GetFirstChild(ASTNode* ast)
@@ -433,7 +435,21 @@ namespace Compiler::AST
 		}
 		else if (child->type == TokenType::While)
 		{
-
+			return AnalysisWhileStmt(stmt, symtable);
+		}
+		else if (child->type == TokenType::Continue)
+		{
+			auto res = new IR::Stmt();
+			res->stype = IR::Stmt::Type::Continue;
+			res->parentSymtable = symtable;
+			return res;
+		}
+		else if (child->type == TokenType::Break)
+		{
+			auto res = new IR::Stmt();
+			res->stype = IR::Stmt::Type::Break;
+			res->parentSymtable = symtable;
+			return res;
 		}
 		else if (child->type == TokenType::CodeBlock)
 		{
@@ -788,14 +804,11 @@ namespace Compiler::AST
 		return res;
 	}
 
-	IR::Expr* AnalysisCondTree(ASTNode* exp, IR::SymbolList* syms, IR::IfElseStmt* rif);
+	IR::Expr* AnalysisCondTree(ASTNode* exp, IR::SymbolList* syms);
 
 
 	IR::LogicCondNode* AnalysisCondOrExp(
-		ASTNode* exp, IR::SymbolList* syms, 
-		IR::IfElseStmt* rif, 
-		IR::LogicCondNode* successNode = nullptr,
-		IR::LogicCondNode* failNode = nullptr)
+		ASTNode* exp, IR::SymbolList* syms)
 	{
 		auto node = new IR::LogicCondNode();
 		node->ctype = IR::LogicCondNode::CType::OR;
@@ -806,7 +819,7 @@ namespace Compiler::AST
 		{
 			if (sube->type == TokenType::Or)
 				continue;
-			auto orres = AnalysisCondTree(sube, syms, rif);
+			auto orres = AnalysisCondTree(sube, syms);
 			nodes.push_back(orres);
 		}
 
@@ -814,8 +827,7 @@ namespace Compiler::AST
 	}
 
 	IR::LogicCondNode* AnalysisCondAndExp(
-		ASTNode* exp, IR::SymbolList* syms,
-		IR::IfElseStmt* rif) 
+		ASTNode* exp, IR::SymbolList* syms) 
 	{
 		auto node = new IR::LogicCondNode();
 		node->ctype = IR::LogicCondNode::CType::AND;
@@ -826,14 +838,14 @@ namespace Compiler::AST
 		{
 			if (sube->type == TokenType::And)
 				continue;
-			auto orres = AnalysisCondTree(sube, syms, rif);
+			auto orres = AnalysisCondTree(sube, syms);
 			nodes.push_back(orres);
 		}
 
 		return node;
 	}
 	
-	IR::Expr* AnalysisCondEqExp(ASTNode* exp, IR::SymbolList* syms, IR::IfElseStmt* rif)
+	IR::Expr* AnalysisCondEqExp(ASTNode* exp, IR::SymbolList* syms)
 	{
 		auto& lval = exp->tokenList[0];
 		auto& op = exp->tokenList[1];
@@ -866,8 +878,7 @@ namespace Compiler::AST
 
 	}
 	IR::Expr* AnalysisCondRelExp(
-		ASTNode* exp, IR::SymbolList* syms,
-		IR::IfElseStmt* rif)
+		ASTNode* exp, IR::SymbolList* syms)
 	{
 		auto opand1 = exp->tokenList[0];
 		auto op = exp->tokenList[1];
@@ -908,22 +919,44 @@ namespace Compiler::AST
 
 	}
 
-	IR::Expr* AnalysisCondTree(ASTNode* exp, IR::SymbolList* syms, IR::IfElseStmt* rif)
+	IR::Expr* AnalysisCondTree(ASTNode* exp, IR::SymbolList* syms)
 	{
 		if (exp->type == TokenType::Cond)
-			return AnalysisCondOrExp(GetFirstChild(exp), syms, rif);
+			return AnalysisCondOrExp(GetFirstChild(exp), syms);
 		else if (exp->type == TokenType::LOrExp)
-			return AnalysisCondOrExp(exp, syms, rif);
+			return AnalysisCondOrExp(exp, syms);
 		else if (exp->type == TokenType::LAndExp)
-			return AnalysisCondAndExp(exp, syms, rif);
+			return AnalysisCondAndExp(exp, syms);
 		else if (exp->type == TokenType::EqExp)
-			return AnalysisCondEqExp(exp, syms, rif);
+			return AnalysisCondEqExp(exp, syms);
 		else if (exp->type == TokenType::RelExp)
-			return AnalysisCondRelExp(exp, syms, rif);
+			return AnalysisCondRelExp(exp, syms);
 
 		Console::Log("Unexpected Error in File:" __FILE__ "line:", __LINE__, Level::Fatal);
 		Console::SetExitCode(-14);
 		return nullptr;
+	}
+	IR::Stmt* AnalysisWhileStmt(ASTNode* exp, IR::SymbolList* syms) 
+	{
+		auto conds = exp->tokenList[2];
+		auto stmts = exp->tokenList[4];
+
+		auto cond = AnalysisCondTree(GetChild<TokenType::Cond>(exp), syms);
+		if (cond->etype != IR::Expr::EType::Cond)
+		{
+			Console::Log("Unexpected Error in File:" __FILE__ "line:", __LINE__, Level::Fatal);
+			Console::SetExitCode(-14);
+		}
+
+		auto stmt = AnalysisStmt(stmts, syms);
+
+		auto res = new IR::While();
+		res->stype = IR::Stmt::Type::While;
+		res->cond = cond;
+		res->success = stmt;
+		res->parentSymtable = syms;
+
+		return res;
 	}
 
 	IR::Stmt* AnalysisIfElseStmt(ASTNode* exp, IR::SymbolList* syms)
@@ -931,7 +964,7 @@ namespace Compiler::AST
 		auto res = new IR::IfElseStmt();
 		res->parentSymtable = syms;
 
-		auto cond = AnalysisCondTree(GetChild<TokenType::Cond>(exp), syms, res);
+		auto cond = AnalysisCondTree(GetChild<TokenType::Cond>(exp), syms);
 		if (cond->etype != IR::Expr::EType::Cond) 
 		{
 			Console::Log("Unexpected Error in File:" __FILE__ "line:", __LINE__, Level::Fatal);

@@ -173,7 +173,7 @@ namespace Compiler::IR
 	struct While : public Stmt
 	{
 		Expr* cond;
-		CodeBlock* success;
+		Stmt* success;
 	};
 
 	
