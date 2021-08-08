@@ -14,8 +14,8 @@ int main(int argc, const char* argv[])
 	auto sy_in = argv[1];
 	auto ast_out = argv[2];
 
-	//sy_in = "test/vars.sy";
-	//ast_out = "out.ast";
+	sy_in = "test/vars.sy";
+	ast_out = "out.ast";
 
 
 	LexParser lexer(sy_in);
@@ -26,6 +26,7 @@ int main(int argc, const char* argv[])
 	AST::StripExprNode(ast);
 	AST::StripHumanReadable(ast);
 	AST::StripArrayInitValue(ast);
+	// AST::StripUniformStructure(ast);
 
 
 	auto ast_txt = VisualizeAST(ast);

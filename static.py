@@ -15,7 +15,7 @@ def search(dir='.'):
                     full_dir, 'r', encoding='utf-8')])
                 print(file_line, ":"+full_dir)
                 res += file_line
-        elif (path.isdir(file)):
+        elif (path.isdir(full_dir)):
             res += search(full_dir)
     return res
 

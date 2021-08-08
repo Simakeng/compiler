@@ -31,9 +31,9 @@ namespace Compiler::IR
 		auto search = this->index.find(name);
 		if (search != this->index.end())
 			return search->second;
-		else if (this->parentList == nullptr)
+		else if (this->parentSymList == nullptr)
 			return nullptr;
-		else return this->parentList->Index(name);
+		else return this->parentSymList->Index(name);
 	}
 	void SymbolList::AppendDecl(Decl* decl)
 	{

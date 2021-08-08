@@ -16,6 +16,8 @@ namespace Compiler::AST
 
 	void StripArrayInitValue(ASTNode* ast);
 
+	void StripUniformStructure(ASTNode* ast);
+
 	IR::Decl::Type GetDeclType(ASTNode* ast);
 
 	std::deque<ASTNode*> SearchNodeDecls(ASTNode* ast);
@@ -37,6 +39,8 @@ namespace Compiler::AST
 	IR::ConstDecl* AnalysisConstDecl(ASTNode* var, IR::SymbolList* syms);
 
 	IR::FunctionDecl* AnalysisFunction(ASTNode* var, IR::SymbolList* syms);
+
+	IR::Expr* AnalysisExprStmt(ASTNode* stmt, IR::SymbolList* syms);
 
 	IR::VarDecl* AnalysisVarDecl(ASTNode* var, IR::SymbolList* syms);
 

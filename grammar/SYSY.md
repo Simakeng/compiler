@@ -66,11 +66,12 @@ ElseStmt -> ε
 
 
 
-Exp -> AddExp AssignExpBody
+Exp -> AssignExp
+AssignExp -> AddExp AssignExpNext
 ConstExp -> AddExp
 
-AssignExpBody -> '=' AddExp
-AssignExpBody -> ε
+AssignExpNext -> '=' AddExp
+AssignExpNext -> ε
 
 Cond -> LOrExp
 

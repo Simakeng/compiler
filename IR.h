@@ -6,21 +6,23 @@
 #include <unordered_map>
 namespace Compiler::IR
 {
-	class IR;
+	struct SymbolList;
 
 	struct Stmt
 	{
 		enum class Type
 		{
+			Decl,
 			Expr,
 			If,
 			While,
 			Continue,
 			Break,
-			CodeBlock
-		} type;
+			CodeBlock,
+			UNDEFINED
+		} stype = Type::UNDEFINED;
 
-		IR* parentIR;
+		SymbolList* parentSymtable;
 	};
 
 	struct Operation
@@ -41,40 +43,66 @@ namespace Compiler::IR
 			LEQ, // <=
 			NOT, // !
 
+			NEG, // -a
+
 			AND,
 			OR,
 
 			FUNC_CALL,
-			DECL_IMPORT, // declare param import
+			PARAM_REF, // declare param import
 			DECL_VALUE,	// declare expr value
-			SET_VALUE, // assign value to variable
+			ASSIGN_VALUE, // assign value to variable
+			CONST_VALUE, // constant
 
-		} type;
+			UNDEFINED
+
+		} optype = Type::UNDEFINED;
+
 		Operation* Opend1 = nullptr;
 		Operation* Opend2 = nullptr;
 	};
 
-	struct Decl
+	struct IdentRefOperation : public Operation
+	{
+		std::string targetIdentName;
+		Operation*& offop = Opend1;
+	};
+	struct ConstValueOperation : public Operation
+	{
+		int val;
+	};
+
+	struct AssignOperation : public Operation
+	{
+		std::string targetIdent;
+		Operation*& offop = Opend1;
+		Operation*& valop = Opend2;
+	};
+
+	struct Decl : public Stmt
 	{
 		enum class Type
 		{
 			Const,
 			Var,
 			Param,
-			Function
-		} type;
+			Function,
+			UNDEFINED
+		} dtype = Type::UNDEFINED;
 		std::string name;
-		Decl(Type _type) : type(_type) {};
+		Decl(Type _type) : dtype(_type) {};
 		~Decl() = default;
 	};
+
 	struct ConstDecl : public Decl
 	{
 		enum class VType
 		{
 			VOID,
 			INT,
-			INTPTR
-		} vtype;
+			INTPTR,
+			UNDEFINED
+		} vtype = VType::UNDEFINED;
 		std::deque<int> size;
 		std::vector<int> initValue;
 
@@ -84,13 +112,16 @@ namespace Compiler::IR
 
 	};
 
-	class CodeBlock;
+	struct CodeBlock;
 
-	class Expr : public Stmt
+	struct Expr : public Stmt
 	{
-		
-		std::deque<Operation> ops;
-		CodeBlock* parentCB;
+		enum class EType
+		{
+			Expr,
+			Cond
+		} etype = EType::Expr;
+		std::deque<Operation*> ops;
 	};
 
 	struct InitExprs
@@ -105,36 +136,47 @@ namespace Compiler::IR
 		VarDecl() : ConstDecl(Type::Var) {}
 	};
 
-	class CodeBlock : public Stmt
-	{
-		std::deque<VarDecl> localVariables;
-		std::deque<VarDecl> localConstants;
-		CodeBlock* parentBlock = nullptr;
-	};
-
-
-	class If : public Stmt
-	{
-		Expr* cond;
-		CodeBlock* success;
-		CodeBlock* fail;
-	};
-
-	class While : public Stmt
-	{
-		Expr* cond;
-		CodeBlock* success;
-	};
-
 	struct SymbolList
 	{
 		std::deque<Decl*> decls;
 		std::unordered_map<std::string, Decl*> index;
-		SymbolList* parentList = nullptr;
+		SymbolList* parentSymList = nullptr;
 
 		Decl* Index(const std::string& name);
 		void AppendDecl(Decl* decl);
 	};
+
+	struct CodeBlock : public Stmt
+	{
+		std::deque<Stmt*> stmts;
+		SymbolList symbs;
+	};
+
+	struct LogicCondNode : public Expr
+	{
+		std::deque<Expr*> evalList;
+		enum class CType 
+		{
+			OR,
+			AND,
+			UNDEFINED,
+		} ctype = CType::UNDEFINED;
+	};
+
+	struct IfElseStmt : public Stmt
+	{
+		LogicCondNode* cond;
+		Stmt* success;
+		Stmt* fail;
+	};
+
+	struct While : public Stmt
+	{
+		Expr* cond;
+		CodeBlock* success;
+	};
+
+	
 
 	struct FunctionDecl : public Decl
 	{
